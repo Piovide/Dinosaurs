@@ -4,7 +4,7 @@
     'color' => null,
     'padded' => false,
     'align' => 'middle',
-    'path' => 'build/svg/bootstrap-icons.svg'
+    'path' => '/build/assets/svg/bootstrap-icons.svg'
 ])
 
 <svg {{ $attributes->class([
