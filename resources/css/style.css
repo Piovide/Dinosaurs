@@ -1,0 +1,25 @@
+/* PALETTE 5BAEB1,377F80,086D56,20A480 */
+
+/* Icon sizes */
+.icon {
+    display: inline-block;
+    width: 1em;
+    vertical-align: middle;
+    fill: currentColor;
+}
+
+.icon-sm {
+    width: 0.875em;
+}
+
+.icon-md {
+    width: 1.25em;
+}
+
+.icon-lg {
+    width: 2em;
+}
+
+.icon-xl {
+    width: 3em;
+}
