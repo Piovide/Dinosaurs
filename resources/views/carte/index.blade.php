@@ -1,7 +1,5 @@
 <x-app-layout title="Enciclopedia Carte Dinosaurs">
 
-<h1 class="mb-4">Enciclopedia Carte</h1>
-
 <form method="GET" class="mb-4">
     <div class="row g-2">
         <div class="col-md-3">

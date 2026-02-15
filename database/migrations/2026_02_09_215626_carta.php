@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('art_id_artista')->nullable()->constrained('artista', 'id_artista');
             $table->foreignId('dnz_id_rarita')->nullable()->constrained('dizionario', 'id_dizionario');
             $table->foreignId('dnz_id_tipo')->nullable()->constrained('dizionario', 'id_dizionario');
-            $table->integer('numero_carta')->nullable();
+            $table->integer('numero')->nullable();
             $table->string('immagine_url')->nullable();
             $table->timestamps();
         });

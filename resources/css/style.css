@@ -4,6 +4,7 @@
 .icon {
     display: inline-block;
     width: 1em;
+    aspect-ratio: 1;
     vertical-align: middle;
     fill: currentColor;
 }
@@ -22,4 +23,28 @@
 
 .icon-xl {
     width: 3em;
+}
+/* Navbar */
+#nav-bar-home {
+    padding: 1rem;
+    & a {
+        font-size: large;
+        padding: .5rem 1rem;
+        border-radius: 2rem;
+        border: 1px solid black;
+        width: 8rem;
+        text-align: center;
+        background-color: white;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        &:hover {
+            background-color: black;
+            color: white;
+        }
+    }
+
+    & li:hover a.active:not(:hover) {
+        background-color: white;
+        color: black;
+    }
+
 }

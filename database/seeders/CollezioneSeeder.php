@@ -11,7 +11,8 @@ class CollezioneSeeder extends Seeder
     {
         DB::table('collezione')->insert([
             'nome' => 'Dinosaurs',
-            'descrizione' => 'Set di carte Dinosaurs Tomodachi Press',
+            'descrizione' => 'Set di carte sui dinosauri',
+            'numero_carte' => 200,
             'data_uscita' => now(),
         ]);
     }

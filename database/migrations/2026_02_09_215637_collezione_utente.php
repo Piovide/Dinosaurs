@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->id('id_collezione_utente');
             $table->foreignId('utn_id_utente')->constrained('users');
             $table->foreignId('car_id_carta')->constrained('carta', 'id_carta');
-            $table->integer('quantita')->default(1);
+            $table->integer('quantita')->default(0);
             $table->boolean('preferita')->default(false);
             $table->text('note')->nullable();
             $table->timestamps();

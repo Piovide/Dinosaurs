@@ -17,7 +17,7 @@ class CartaSeeder extends Seeder
                 'art_id_artista' => 1,
                 'dnz_id_rarita' => 1,
                 'dnz_id_tipo' => 4,
-                'numero_carta' => 1,
+                'numero' => 1,
                 'immagine_url' => '',
             ],
             [
@@ -27,7 +27,7 @@ class CartaSeeder extends Seeder
                 'art_id_artista' => 2,
                 'dnz_id_rarita' => 2,
                 'dnz_id_tipo' => 4,
-                'numero_carta' => 2,
+                'numero' => 2,
                 'immagine_url' => '',
             ],
         ]);

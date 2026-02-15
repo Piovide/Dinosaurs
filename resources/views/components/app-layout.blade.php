@@ -16,17 +16,20 @@
                 <img src="{{ asset('img/logo_rubato.png') }}" alt="Logo" width="150" height="75" class="d-inline-block align-top">
             </a>
         </div>
-        <div class="">
+        <div id="nav-bar-home">
            {{-- nav centrale: carte, artisti, collezione --}}
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-5 d-flex align-items-center">
                 <li class="nav-item">
-                    <a class="nav-link mx-5" href="">Carte</a>
+                    <a class="nav-link" href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link mx-5" href="">Artisti</a>
+                    <a class="nav-link" href="">Collezione</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link mx-5" href="">Collezione</a>
+                    <a class="nav-link" href="">Artisti</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">Crediti</a>
                 </li>
             </ul>
         </div>

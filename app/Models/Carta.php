@@ -18,7 +18,7 @@ class Carta extends Model
         'art_id_artista',
         'dnz_id_rarita',
         'dnz_id_tipo',
-        'numero_carta',
+        'numero',
         'immagine_url'
     ];
 
