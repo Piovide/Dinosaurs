@@ -1,4 +1,103 @@
-/* PALETTE 5BAEB1,377F80,086D56,20A480 */
+/* PALETTE #5BAEB1,#377F80,#086D56,#20A480 */
+:root {
+    --primary-color: #6acca1;
+    --secondary-color: #377F80;
+    --accent-color: #086D56;
+    --background-color: #0e6b52;
+}
+body {
+    background-color: var(--background-color) !important;
+    min-height: 100vh;
+}
+
+.card {
+    position: relative;
+    width: 100%;
+    background-color: var(--primary-color) !important;
+    & .img-container {
+        aspect-ratio: 63.5 / 88;
+        background-color: white;
+    }
+}
+
+/* Effetto 3D sul modal */
+.card[data-carta-id] {
+    width: 100%;
+}
+
+/* Modal per l'immagine ingrandita */
+.modal-carta-ingrandita {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+    perspective: 1000px;
+}
+
+.modal-carta-ingrandita.active {
+    display: flex;
+}
+
+.modal-carta-contenuto {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    height: 90vh;
+    animation: slideUp 0.3s ease-out;
+    transform-style: preserve-3d;
+    transition: transform 0.05s linear;
+}
+
+.modal-carta-contenuto img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.modal-carta-chiudi {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 32px;
+    cursor: pointer;
+    transition: transform 0.2s ease-out;
+}
+
+.modal-carta-chiudi:hover {
+    transform: scale(1.1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
 
 /* Icon sizes */
 .icon {
@@ -25,26 +124,29 @@
     width: 3em;
 }
 /* Navbar */
+#main-navbar {
+    background-color: var(--primary-color);
+}
 #nav-bar-home {
     padding: 1rem;
     & a {
         font-size: large;
         padding: .5rem 1rem;
         border-radius: 2rem;
-        border: 1px solid black;
+        border: 1px solid var(--accent-color);
         width: 8rem;
         text-align: center;
         background-color: white;
         transition: background-color 0.3s ease, color 0.3s ease;
         &:hover {
-            background-color: black;
+            background-color: var(--accent-color);
             color: white;
         }
     }
 
     & li:hover a.active:not(:hover) {
         background-color: white;
-        color: black;
+        color: var(--accent-color);
     }
 
 }

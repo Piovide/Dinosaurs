@@ -11,7 +11,8 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('collezione_utente', function (Blueprint $table) {
             $table->id('id_collezione_utente');
-            $table->foreignId('utn_id_utente')->constrained('users');
+            $table->unsignedBigInteger('utn_id_utente');
+            $table->foreign('utn_id_utente')->references('id_utente')->on('utente')->cascadeOnDelete();
             $table->foreignId('car_id_carta')->constrained('carta', 'id_carta');
             $table->integer('quantita')->default(0);
             $table->boolean('preferita')->default(false);

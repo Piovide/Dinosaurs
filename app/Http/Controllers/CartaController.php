@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class CartaController extends Controller
 {
-    // Lista tutte le carte con filtri
     public function index(Request $request)
     {
         $query = Carta::with(['collezione', 'artista', 'rarita', 'tipo']);
@@ -22,7 +21,7 @@ class CartaController extends Controller
         }
         $pagination = $query->paginate(12);
         $carte = $pagination->getCollection();
-        
+
 
         $rarita = Dizionario::where('categoria', 'rarita')->where('stato', 1)->get();
         $tipi = Dizionario::where('categoria', 'tipo')->where('stato', 1)->get();
@@ -30,7 +29,6 @@ class CartaController extends Controller
         return view('carte.index', compact('carte', 'pagination', 'rarita', 'tipi'));
     }
 
-    // Mostra dettaglio carta
     public function show($id)
     {
         $carta = Carta::with(['collezione', 'artista', 'rarita', 'tipo'])->findOrFail($id);

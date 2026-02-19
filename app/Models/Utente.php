@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable {
+class Utente extends Authenticatable {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -28,7 +28,6 @@ class User extends Authenticatable {
         'email',
         'password',
         'preferences',
-        'ruolo',
     ];
 
     /**
@@ -54,33 +53,9 @@ class User extends Authenticatable {
     }
 
     /**
-     * Metodi Helper per verificare il ruolo
-     */
-    public function isAdmin(): bool
-    {
-        return $this->ruolo === 'admin';
-    }
-
-    public function isModerator(): bool
-    {
-        return $this->ruolo === 'moderatore';
-    }
-
-    public function isUser(): bool
-    {
-        return $this->ruolo === 'utente';
-    }
-
-    public function hasRole(string $role): bool
-    {
-        return $this->ruolo === $role;
-    }
-
-    /**
      * Relazione con collezioni utente
      */
-    public function collezioniUtenti()
-    {
+    public function collezione_utente(){
         return $this->hasMany(CollezioneUtente::class, 'utn_id_utente', 'id_utente');
     }
 }

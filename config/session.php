@@ -90,6 +90,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Session User ID Column
+    |--------------------------------------------------------------------------
+    |
+    | Specify the column name used to store the user ID in the session table.
+    | This is used when the session driver is "database".
+    |
+    */
+
+    'user_id' => 'utn_id_utente',
+
+    /*
+    |--------------------------------------------------------------------------
     | Session Cache Store
     |--------------------------------------------------------------------------
     |

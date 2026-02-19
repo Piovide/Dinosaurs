@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'Dinosaurs Card Encyclopedia' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
@@ -37,6 +38,18 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
     <div class="container">
         <a class="navbar-brand" href="{{ route('home') }}">Dinosaurs</a>
+        <div class="ms-auto">
+            @auth
+                <span class="me-3">{{ Auth::user()->name }}</span>
+                <form method="POST" action="{{ route('auth.logout') }}" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Logout</button>
+                </form>
+            @else
+                <button class="btn btn-sm btn-primary me-2" onclick="openLoginModal()">Login</button>
+                <button class="btn btn-sm btn-outline-primary" onclick="openRegisterModal()">Registrati</button>
+            @endauth
+        </div>
     </div>
 </nav>
 
@@ -45,8 +58,10 @@
 </div>
 
 <footer>
-    &copy; 2026 copy 
+    &copy; 2026 copy
 </footer>
+
+<x-auth-modal />
 
 </body>
 </html>

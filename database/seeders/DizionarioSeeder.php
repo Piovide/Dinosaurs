@@ -13,46 +13,46 @@ class DizionarioSeeder extends Seeder
             // Rarità
             [
                 'categoria' => 'rarita',
-                'descrizione' => '',
+                'descrizione' => 'Comune',
                 'stato' => 1,
             ],
             [
                 'categoria' => 'rarita',
-                'descrizione' => '',
+                'descrizione' => 'Rara',
                 'stato' => 1,
             ],
             [
                 'categoria' => 'rarita',
-                'descrizione' => '',
+                'descrizione' => 'Ultra rara',
                 'stato' => 1,
             ],
 
             // Tipi
             [
                 'categoria' => 'tipo',
-                'descrizione' => '',
+                'descrizione' => 'Saurischi',
                 'stato' => 1,
             ],
             [
                 'categoria' => 'tipo',
-                'descrizione' => '',
+                'descrizione' => 'Pterosauri',
                 'stato' => 1,
             ],
             [
                 'categoria' => 'tipo',
-                'descrizione' => '',
+                'descrizione' => 'Ornitischi',
                 'stato' => 1,
             ],
 
             // Stato carta
             [
                 'categoria' => 'stato',
-                'descrizione' => '',
+                'descrizione' => 'valido',
                 'stato' => 1,
             ],
             [
                 'categoria' => 'stato',
-                'descrizione' => '',
+                'descrizione' => 'invalido',
                 'stato' => 1,
             ],
         ];
