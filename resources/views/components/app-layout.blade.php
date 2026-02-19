@@ -3,11 +3,13 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="/build/assets/app-DNLR3VPH.css">
+<script type="module" src="/build/assets/app-8aMPh8O_.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4" id="main-navbar">
