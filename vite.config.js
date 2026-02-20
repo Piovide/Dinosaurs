@@ -19,7 +19,6 @@ export default defineConfig({
             ],
         }),
     ],
-    base: process.env.VITE_URL + '/',
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],
