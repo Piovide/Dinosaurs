@@ -122,7 +122,6 @@ function initCartaImageZoom() {
     });
     const closeModal = () => {
         modal.classList.remove('active');
-        removeModal3DEffect();
     };
 
 

@@ -19,7 +19,11 @@ export default defineConfig({
             ],
         }),
     ],
-    base: process.env.VITE_URL + '/',
+    build: {
+        manifest: true,
+        outDir: 'public/build',
+        emptyOutDir: true,
+    },
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],
