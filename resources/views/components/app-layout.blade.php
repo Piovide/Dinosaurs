@@ -3,8 +3,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <link rel="stylesheet" href="{{ asset('build/assets/app-BhSzC2_y.css') }}">
-    <script type="module" src="{{ asset('build/assets/app-z0zMkIb3.js') }}"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
