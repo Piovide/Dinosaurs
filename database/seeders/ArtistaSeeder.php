@@ -14,6 +14,7 @@ class ArtistaSeeder extends Seeder
             ['nome' => 'Luigi', 'cognome' => 'Bianchi', 'link_sito' => '', 'link_social' => ''],
         ];
 
-        DB::table('artista')->insert($artists);
+
+        DB::table('artista')->insertOrIgnore($artists);
     }
 }

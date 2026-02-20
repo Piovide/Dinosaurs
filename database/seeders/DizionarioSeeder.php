@@ -9,6 +9,7 @@ class DizionarioSeeder extends Seeder
 {
     public function run(): void
     {
+        DB::table('dizionario')->truncate();
         $entries = [
             // Rarità
             [

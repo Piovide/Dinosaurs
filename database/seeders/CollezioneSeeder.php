@@ -9,7 +9,7 @@ class CollezioneSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('collezione')->insert([
+        DB::table('collezione')->insertOrIgnore([
             'nome' => 'Dinosaurs',
             'descrizione' => 'Set di carte sui dinosauri',
             'numero_carte' => 200,

@@ -9,7 +9,8 @@ class CartaSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('carta')->insert([
+
+        DB::table('carta')->insertOrIgnore([
             [
                 'col_id_collezione' => 1,
                 'titolo' => 'T-Rex',
