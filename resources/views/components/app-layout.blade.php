@@ -31,7 +31,7 @@
                     <a class="nav-link" href="">Artisti (WIP)</a>
                 </li>
                 <li class="nav-item mx-3">
-                    <a class="nav-link" href="">Crediti</a>
+                    <a class="nav-link" href="">Crediti (WIP)</a>
                 </li>
             </ul>
         </div>

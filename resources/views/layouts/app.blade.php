@@ -6,8 +6,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'Dinosaurs Card Encyclopedia' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link rel="stylesheet" href="{{ assets('/build/assets/app-DNLR3VPH.css') }}">
-    <script type="module" src="{{ assets('/build/assets/app-8aMPh8O_.js') }}"></script>
     <style>
         body {
             background-color: #f7f7f7;

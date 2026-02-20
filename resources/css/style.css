@@ -13,7 +13,8 @@ body {
 .card {
     position: relative;
     width: 100%;
-    background-color: var(--primary-color) !important;
+    background-color: rgba(255, 255, 255, 0.4) !important;
+    backdrop-filter: blur(10px);
     & .img-container {
         aspect-ratio: 63.5 / 88;
         background-color: white;
