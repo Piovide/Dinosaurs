@@ -3,7 +3,6 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('build/assets/app-BhSzC2_y.css') }}">
     <script type="module" src="{{ asset('build/assets/app-z0zMkIb3.js') }}"></script>
     <meta charset="UTF-8">
