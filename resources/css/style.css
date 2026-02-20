@@ -50,9 +50,21 @@ body {
     max-width: 90vw;
     max-height: 90vh;
     height: 90vh;
+    width: auto;
+    aspect-ratio: 63.5 / 88;
     animation: slideUp 0.3s ease-out;
     transform-style: preserve-3d;
     transition: transform 0.05s linear;
+}
+
+@media (width < 600px) {
+    .modal-carta-contenuto {
+        max-width: 80vw;
+        max-height: 80vh;
+        height: auto;
+        width: 90vh;
+    }
+
 }
 
 .modal-carta-contenuto img {

@@ -11,31 +11,31 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4" id="main-navbar">
-    <div class="w-100 d-flex justify-content-between align-items-center mx-5 px-5 py-3">
-        <div class="">
+    <div class="row w-100 d-flex justify-content-between align-items-center mx-5 px-5 py-3">
+        <div class="col-12 col-md-3">
             <a class="navbar-brand" href="{{ route('home') }}">
                 <img src="{{ asset('img/logo_rubato.png') }}" alt="Logo" class="d-inline-block align-top" style="width: 15rem">
             </a>
         </div>
-        <div id="nav-bar-home">
+        <div id="nav-bar-home" class="col-12 col-md-6">
            {{-- nav centrale: carte, artisti, collezione --}}
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-5 d-flex align-items-center">
-                <li class="nav-item">
+            <ul class="navbar-nav me-auto mb-2 gap-2 mb-lg-0 d-flex flex-row flex-wrap align-items-center justify-content-center">
+                <li class="nav-item mx-3">
                     <a class="nav-link" href="{{ route('home') }}">Home</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item mx-3">
                     <a class="nav-link" @auth href="{{ route('collezione') }}" @else onclick="openLoginModal(); return false;" @endauth>Collezione</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item mx-3">
                     <a class="nav-link" href="">Artisti (WIP)</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item mx-3">
                     <a class="nav-link" href="">Crediti</a>
                 </li>
             </ul>
         </div>
-        <div class="">
-            <ul class="navbar-nav ms-auto gap-3 mb-2 mb-lg-0 d-flex align-items-center">
+        <div class="col-12 col-md-3">
+            <ul class="navbar-nav ms-auto gap-3 mb-2 mb-lg-0 d-flex flex-row align-items-center justify-content-center">
                 <li class="nav-item dropdown">
                     <button class="nav-link btn btn-link d-flex align-items-center" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border: none; cursor: pointer;">
                         <x-icon name="person" size="lg" color="black" />

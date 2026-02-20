@@ -13,7 +13,7 @@ class UtenteSeeder extends Seeder
      */
     public function run(): void
     {
-        Utente::create([
+        Utente::createOrFirst([
             'nome' => 'Test',
             'cognome' => 'User',
             'username' => 'testuser',
@@ -22,7 +22,7 @@ class UtenteSeeder extends Seeder
             'preferences' => json_encode([])
         ]);
 
-        Utente::create([
+        Utente::createOrFirst([
             'nome' => 'Admin',
             'cognome' => 'User',
             'username' => 'adminuser',
