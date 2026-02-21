@@ -20,10 +20,16 @@ export default defineConfig({
         }),
     ],
     build: {
-        manifest: true,
-        outDir: 'public/build',
-        emptyOutDir: true,
+    outDir: 'public/build',
+    emptyOutDir: true,
+    rollupOptions: {
+        output: {
+            entryFileNames: 'assets/[name]-[hash].js',
+            chunkFileNames: 'assets/[name]-[hash].js',
+            assetFileNames: 'assets/[name]-[hash].[ext]',
+        },
     },
+},
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],
