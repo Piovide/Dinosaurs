@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\CartaImageService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,8 +20,17 @@ class Carta extends Model
         'dnz_id_rarita',
         'dnz_id_tipo',
         'numero',
-        'immagine_url'
+        'immagine_url',
     ];
+
+    /**
+     * Returns the full public asset URL for the card image, or null if not set.
+     * DB stores a relative path like "{collection-slug}/{filename}".
+     */
+    public function getImmagineAssetAttribute(): ?string
+    {
+        return app(CartaImageService::class)->assetUrl($this->immagine_url);
+    }
 
     public function collezione()
     {

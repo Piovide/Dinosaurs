@@ -22,12 +22,11 @@ class Utente extends Authenticatable {
      * @var list<string>
      */
     protected $fillable = [
-        'nome',
-        'cognome',
         'username',
         'email',
         'password',
         'preferences',
+        'ruolo',
     ];
 
     /**
@@ -57,5 +56,15 @@ class Utente extends Authenticatable {
      */
     public function collezione_utente(){
         return $this->hasMany(CollezioneUtente::class, 'utn_id_utente', 'id_utente');
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->ruolo === 'admin';
+    }
+
+    public function isModerator(): bool
+    {
+        return $this->ruolo === 'moderatore' || $this->ruolo === 'admin';
     }
 }

@@ -50,16 +50,12 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'nome' => 'required|string|max:255',
-            'cognome' => 'required|string|max:255',
             'username' => 'required|string|unique:utente|max:255',
             'email' => 'required|email|unique:utente',
             'password' => 'required|min:6|confirmed'
         ]);
 
         $user = Utente::create([
-            'nome' => $validated['nome'],
-            'cognome' => $validated['cognome'],
             'username' => $validated['username'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),

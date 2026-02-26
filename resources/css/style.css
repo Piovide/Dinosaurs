@@ -141,7 +141,7 @@ body {
 }
 #nav-bar-home {
     padding: 1rem;
-    & a {
+    & a.nav-link {
         font-size: large;
         padding: .5rem 1rem;
         border-radius: 2rem;

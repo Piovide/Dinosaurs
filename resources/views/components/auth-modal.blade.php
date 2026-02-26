@@ -42,16 +42,6 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="register-nome" class="form-label">Nome</label>
-                        <input type="text" class="form-control" id="register-nome" name="nome" required>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="register-cognome" class="form-label">Cognome</label>
-                        <input type="text" class="form-control" id="register-cognome" name="cognome" required>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                    <div class="mb-3">
                         <label for="register-username" class="form-label">Username <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="register-username" name="username" required>
                         <div class="invalid-feedback"></div>

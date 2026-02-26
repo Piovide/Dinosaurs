@@ -19,11 +19,6 @@ export default defineConfig({
             ],
         }),
     ],
-    build: {
-        manifest: true,
-        outDir: 'public/build',
-        emptyOutDir: true,
-    },
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],

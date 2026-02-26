@@ -13,22 +13,20 @@ class UtenteSeeder extends Seeder
      */
     public function run(): void
     {
-        Utente::createOrFirst([
-            'nome' => 'Test',
-            'cognome' => 'User',
+        Utente::createOrFirst(['username' => 'testuser'], [
             'username' => 'testuser',
             'email' => 'test@example.com',
             'password' => Hash::make('password123'),
-            'preferences' => json_encode([])
+            'preferences' => json_encode([]),
+            'ruolo' => 'utente',
         ]);
 
-        Utente::createOrFirst([
-            'nome' => 'Admin',
-            'cognome' => 'User',
-            'username' => 'adminuser',
+        Utente::createOrFirst(['username' => 'admin'], [
+            'username' => 'admin',
             'email' => 'admin@example.com',
             'password' => Hash::make('admin123'),
-            'preferences' => json_encode([])
+            'preferences' => json_encode([]),
+            'ruolo' => 'admin',
         ]);
     }
 }
