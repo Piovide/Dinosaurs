@@ -18,10 +18,27 @@
             </a>
         </div>
         <div id="nav-bar-home" class="col-12 col-md-6">
-           {{-- nav centrale: carte, artisti, collezione --}}
+           {{-- nav centrale: collezioni dropdown, artisti, collezione utente --}}
+            @php $navCollezioni = \App\Models\Collezione::orderBy('data_uscita', 'desc')->get(); @endphp
             <ul class="navbar-nav me-auto mb-2 gap-2 mb-lg-0 d-flex flex-row flex-wrap align-items-center justify-content-center">
-                <li class="nav-item mx-3">
-                    <a class="nav-link" href="{{ route('home') }}">Home</a>
+                <li class="nav-item dropdown mx-3">
+                    <a class="nav-link dropdown-toggle" href="{{ route('home') }}" id="homeDropdown"
+                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Home
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="homeDropdown">
+                        <li><a class="dropdown-item" href="{{ route('home') }}">Tutte le carte</a></li>
+                        @if($navCollezioni->isNotEmpty())
+                            <li><hr class="dropdown-divider"></li>
+                            @foreach($navCollezioni as $col)
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('home', ['collezione' => $col->id_collezione]) }}">
+                                        {{ $col->nome }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        @endif
+                    </ul>
                 </li>
                 <li class="nav-item mx-3">
                     <a class="nav-link" @auth href="{{ route('collezione') }}" @else onclick="openLoginModal(); return false;" @endauth>Collezione</a>
@@ -43,6 +60,13 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                         @auth
                             <li><h6 class="dropdown-header">{{ Auth::user()->username }}</h6></li>
+                            @if(Auth::user()->isAdmin())
+                                <li>
+                                    <a class="dropdown-item text-warning fw-semibold" href="{{ route('admin.dashboard') }}">
+                                        &#9998; Admin Panel
+                                    </a>
+                                </li>
+                            @endif
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form method="POST" action="{{ route('auth.logout') }}" class="d-inline w-100">

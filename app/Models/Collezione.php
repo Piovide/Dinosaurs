@@ -11,7 +11,7 @@ class Collezione extends Model
 
     protected $table = 'collezione';
     protected $primaryKey = 'id_collezione';
-    protected $fillable = ['nome', 'descrizione', 'data_uscita'];
+    protected $fillable = ['nome', 'descrizione', 'numero_carte', 'data_uscita'];
 
     public function carte(){
         return $this->hasMany(Carta::class, 'col_id_collezione', 'id_collezione');

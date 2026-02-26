@@ -11,9 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('utente', function (Blueprint $table) {
-            $table->enum('ruolo', ['utente', 'moderatore', 'admin'])->default('utente')->after('preferences');
-        });
+        // ruolo è già definito nella migration base di utente
     }
 
     /**
@@ -21,8 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('utente', function (Blueprint $table) {
-            $table->dropColumn('ruolo');
-        });
+        // nessuna operazione
     }
 };

@@ -23,24 +23,8 @@
                 @csrf
 
                 <div class="mb-4">
-                    <label for="nome" class="block text-sm font-medium text-gray-700">Nome</label>
-                    <input type="text" id="nome" name="nome" value="{{ old('nome') }}" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm" autofocus>
-                    @error('nome')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="mb-4">
-                    <label for="cognome" class="block text-sm font-medium text-gray-700">Cognome</label>
-                    <input type="text" id="cognome" name="cognome" value="{{ old('cognome') }}" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
-                    @error('cognome')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="mb-4">
                     <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                    <input type="text" id="username" name="username" value="{{ old('username') }}" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm">
+                    <input type="text" id="username" name="username" value="{{ old('username') }}" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm" autofocus>
                     @error('username')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror

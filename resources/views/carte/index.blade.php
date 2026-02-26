@@ -1,9 +1,20 @@
 @props(['username' => null])
-<x-app-layout title="Enciclopedia Carte Dinosaurs">
+<x-app-layout title="{{ isset($collezione) && $collezione ? $collezione->nome . ' — Dinosaurs' : 'Enciclopedia Carte Dinosaurs' }}">
     @if($username)
         <h1 class="text-center mb-4">Collezione di {{ $username }}</h1>
     @endif
+    @if(isset($collezione) && $collezione)
+        <h2 class="text-center mb-1">{{ $collezione->nome }}</h2>
+        <p class="text-center text-muted mb-4 small">
+            {{ $collezione->descrizione }}
+            &nbsp;&middot;&nbsp;
+            <a href="{{ route('home') }}">Vedi tutte le carte</a>
+        </p>
+    @endif
     <form method="GET" class="mb-4 mx-auto w-50">
+        @if(request('collezione'))
+            <input type="hidden" name="collezione" value="{{ request('collezione') }}">
+        @endif
         <div class="row g-2">
             <div class="col-md-3">
                 <select name="rarita" class="form-select">

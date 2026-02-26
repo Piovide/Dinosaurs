@@ -2,7 +2,7 @@
 <div class="col-md-2 mb-4">
     <div class="card h-100 shadow-sm p-3 rounded" data-carta-id="{{ $carta->id_carta }}">
         <div class="img-container position-relative">
-            <img src="{{ asset('img/dinosaurs/' . $carta->immagine_url) }}" class="card-img-top carta-image" alt="{{ $carta->titolo }}" data-carta-id="{{ $carta->id_carta }}" style="cursor: pointer;" >
+            <img src="{{ $carta->immagine_asset }}" class="card-img-top carta-image" alt="{{ $carta->titolo }}" data-carta-id="{{ $carta->id_carta }}" style="cursor: pointer;" >
             <div class="card-info position-absolute bottom-0 start-0 p-2 bg-dark bg-opacity-50 text-white rounded-end rounded-bottom-0">
                 <small class="d-flex">{{ $carta->numero }} / {{ $carta->collezione->numero_carte }}<x-icon name="star" color="white" class="ms-2" /></small>
             </div>
