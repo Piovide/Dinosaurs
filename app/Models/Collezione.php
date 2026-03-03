@@ -16,4 +16,12 @@ class Collezione extends Model
     public function carte(){
         return $this->hasMany(Carta::class, 'col_id_collezione', 'id_collezione');
     }
+
+    public function rarita(){
+        return $this->hasMany(CollezioneRarita::class, 'col_id_collezione', 'id_collezione');
+    }
+
+    public function tipologie(){
+        return $this->hasMany(CollezioneTipologia::class, 'col_id_collezione', 'id_collezione');
+    }
 }

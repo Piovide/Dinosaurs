@@ -17,8 +17,8 @@ class Carta extends Model
         'titolo',
         'descrizione',
         'art_id_artista',
-        'dnz_id_rarita',
-        'dnz_id_tipo',
+        'rar_id_rarita',
+        'tip_id_tipologia',
         'numero',
         'immagine_url',
     ];
@@ -44,11 +44,11 @@ class Carta extends Model
 
     public function rarita()
     {
-        return $this->belongsTo(Dizionario::class, 'dnz_id_rarita', 'id_dizionario');
+        return $this->belongsTo(CollezioneRarita::class, 'rar_id_rarita', 'id_collezione_rarita');
     }
 
-    public function tipo()
+    public function tipologia()
     {
-        return $this->belongsTo(Dizionario::class, 'dnz_id_tipo', 'id_dizionario');
+        return $this->belongsTo(CollezioneTipologia::class, 'tip_id_tipologia', 'id_collezione_tipologia');
     }
 }

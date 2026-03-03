@@ -39,34 +39,8 @@
                 </div>
 
                 <div class="row g-3 mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">Rarità</label>
-                        <select name="dnz_id_rarita"
-                                class="form-select @error('dnz_id_rarita') is-invalid @enderror">
-                            <option value="">— Nessuna —</option>
-                            @foreach($rarita as $r)
-                                <option value="{{ $r->id_dizionario }}"
-                                    {{ old('dnz_id_rarita') == $r->id_dizionario ? 'selected' : '' }}>
-                                    {{ $r->descrizione }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('dnz_id_rarita')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">Tipo</label>
-                        <select name="dnz_id_tipo"
-                                class="form-select @error('dnz_id_tipo') is-invalid @enderror">
-                            <option value="">— Nessuno —</option>
-                            @foreach($tipi as $tipo)
-                                <option value="{{ $tipo->id_dizionario }}"
-                                    {{ old('dnz_id_tipo') == $tipo->id_dizionario ? 'selected' : '' }}>
-                                    {{ $tipo->descrizione }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('dnz_id_tipo')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
+                    @include('admin.carte._rarita_field', ['selectedRaritaId' => null, 'collezioneId' => $collezione->id_collezione])
+                    @include('admin.carte._tipologia_field', ['selectedTipologiaId' => null, 'collezioneId' => $collezione->id_collezione])
                 </div>
 
                 <div class="mb-4">

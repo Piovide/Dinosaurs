@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Carta;
 use App\Models\Collezione;
 use App\Models\Artista;
-use App\Models\Dizionario;
+use App\Models\CollezioneRarita;
+use App\Models\CollezioneTipologia;
 use App\Services\CartaImageService;
 use Illuminate\Http\Request;
 
@@ -14,13 +15,14 @@ class AdminCartaController extends Controller
 {
     public function edit($id)
     {
-        $carta      = Carta::with(['artista', 'rarita', 'tipo', 'collezione'])->findOrFail($id);
+        $carta      = Carta::with(['artista', 'rarita', 'tipologia', 'collezione'])->findOrFail($id);
         $artisti    = Artista::orderBy('cognome')->get();
-        $rarita     = Dizionario::where('categoria', 'rarita')->where('stato', 1)->get();
-        $tipi       = Dizionario::where('categoria', 'tipo')->where('stato', 1)->get();
+        $collezioneId = $carta->col_id_collezione;
+        $rarita     = CollezioneRarita::where('col_id_collezione', $collezioneId)->orderBy('nome')->get();
+        $tipologie  = CollezioneTipologia::where('col_id_collezione', $collezioneId)->orderBy('nome')->get();
         $collezioni = Collezione::orderBy('nome')->get();
 
-        return view('admin.carte.edit', compact('carta', 'artisti', 'rarita', 'tipi', 'collezioni'));
+        return view('admin.carte.edit', compact('carta', 'artisti', 'rarita', 'tipologie', 'collezioni'));
     }
 
     public function update(Request $request, $id, CartaImageService $imageService)
@@ -30,14 +32,14 @@ class AdminCartaController extends Controller
             'descrizione'       => 'nullable|string',
             'col_id_collezione' => 'required|exists:collezione,id_collezione',
             'art_id_artista'    => 'nullable|exists:artista,id_artista',
-            'dnz_id_rarita'     => 'nullable|exists:dizionario,id_dizionario',
-            'dnz_id_tipo'       => 'nullable|exists:dizionario,id_dizionario',
+            'rar_id_rarita'     => 'nullable|exists:collezione_rarita,id_collezione_rarita',
+            'tip_id_tipologia'  => 'nullable|exists:collezione_tipologia,id_collezione_tipologia',
             'numero'            => 'nullable|integer|min:1',
             'immagine'          => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
         ]);
 
         $carta = Carta::with('collezione')->findOrFail($id);
-        $data  = $request->only('titolo', 'descrizione', 'col_id_collezione', 'art_id_artista', 'dnz_id_rarita', 'dnz_id_tipo', 'numero');
+        $data  = $request->only('titolo', 'descrizione', 'col_id_collezione', 'art_id_artista', 'rar_id_rarita', 'tip_id_tipologia', 'numero');
 
         if ($request->hasFile('immagine')) {
             $imageService->delete($carta->immagine_url);

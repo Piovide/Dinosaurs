@@ -4,11 +4,29 @@
         <div class="img-container position-relative">
             <img src="{{ $carta->immagine_asset }}" class="card-img-top carta-image" alt="{{ $carta->titolo }}" data-carta-id="{{ $carta->id_carta }}" style="cursor: pointer;" >
             <div class="card-info position-absolute bottom-0 start-0 p-2 bg-dark bg-opacity-50 text-white rounded-end rounded-bottom-0">
-                <small class="d-flex">{{ $carta->numero }} / {{ $carta->collezione->numero_carte }}<x-icon name="star" color="white" class="ms-2" /></small>
+                <small class="d-flex align-items-center gap-1">
+                    {{ $carta->numero }} / {{ $carta->collezione->numero_carte }}
+                    <x-icona-badge :record="$carta->rarita" size="14px" />
+                </small>
             </div>
         </div>
         <div class="card-body d-flex flex-column">
             <h5 class="card-title text-center">{{ $carta->titolo }}</h5>
+            @if($carta->rarita || $carta->tipologia)
+                <div class="d-flex justify-content-center gap-1 mb-1 flex-wrap">
+                    @if($carta->rarita)
+                        <span class="badge bg-warning text-dark d-inline-flex align-items-center gap-1">
+                            {{ $carta->rarita->nome }}
+                        </span>
+                    @endif
+                    @if($carta->tipologia)
+                        <span class="badge bg-info text-dark d-inline-flex align-items-center gap-1">
+                            <x-icona-badge :record="$carta->tipologia" size="13px" />
+                            {{ $carta->tipologia->nome }}
+                        </span>
+                    @endif
+                </div>
+            @endif
             <p class="card-text mb-1 text-center">{{ $carta->artista->nome }} {{ $carta->artista->cognome }}</p>
             <div class="row btn-container">
                 <div class="col-4">

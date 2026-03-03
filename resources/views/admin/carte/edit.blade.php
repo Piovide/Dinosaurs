@@ -43,7 +43,6 @@
                 </div>
 
                 <div class="row g-3 mb-3">
-                <div class="row g-3 mb-3">
                     <div class="col-md-4">
                         <label class="form-label fw-semibold">Numero</label>
                         <input type="number" name="numero" min="1"
@@ -55,34 +54,8 @@
                 </div>
 
                 <div class="row g-3 mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">Rarità</label>
-                        <select name="dnz_id_rarita"
-                                class="form-select @error('dnz_id_rarita') is-invalid @enderror">
-                            <option value="">— Nessuna —</option>
-                            @foreach($rarita as $r)
-                                <option value="{{ $r->id_dizionario }}"
-                                    {{ old('dnz_id_rarita', $carta->dnz_id_rarita) == $r->id_dizionario ? 'selected' : '' }}>
-                                    {{ $r->descrizione }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('dnz_id_rarita')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">Tipo</label>
-                        <select name="dnz_id_tipo"
-                                class="form-select @error('dnz_id_tipo') is-invalid @enderror">
-                            <option value="">— Nessuno —</option>
-                            @foreach($tipi as $tipo)
-                                <option value="{{ $tipo->id_dizionario }}"
-                                    {{ old('dnz_id_tipo', $carta->dnz_id_tipo) == $tipo->id_dizionario ? 'selected' : '' }}>
-                                    {{ $tipo->descrizione }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('dnz_id_tipo')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
+                    @include('admin.carte._rarita_field', ['selectedRaritaId' => $carta->rar_id_rarita, 'collezioneId' => $carta->col_id_collezione])
+                    @include('admin.carte._tipologia_field', ['selectedTipologiaId' => $carta->tip_id_tipologia, 'collezioneId' => $carta->col_id_collezione])
                 </div>
 
                 <div class="mb-4">

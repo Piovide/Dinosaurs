@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Carta;
 use App\Models\Collezione;
 use App\Models\Artista;
-use App\Models\Dizionario;
+use App\Models\CollezioneRarita;
+use App\Models\CollezioneTipologia;
 use App\Services\CartaImageService;
 use Illuminate\Http\Request;
 
@@ -20,9 +21,11 @@ class AdminCollezioneController extends Controller
 
     public function show($id)
     {
-        $collezione = Collezione::with('carte.artista', 'carte.rarita', 'carte.tipo')->findOrFail($id);
-        $carte = $collezione->carte()->with(['artista', 'rarita', 'tipo'])->paginate(20);
-        return view('admin.collezioni.show', compact('collezione', 'carte'));
+        $collezione = Collezione::with('carte.artista', 'carte.rarita', 'carte.tipologia')->findOrFail($id);
+        $carte = $collezione->carte()->with(['artista', 'rarita', 'tipologia'])->paginate(20);
+        $rarita    = $collezione->rarita()->orderBy('nome')->get();
+        $tipologie = $collezione->tipologie()->orderBy('nome')->get();
+        return view('admin.collezioni.show', compact('collezione', 'carte', 'rarita', 'tipologie'));
     }
 
     public function create()
@@ -81,10 +84,10 @@ class AdminCollezioneController extends Controller
     {
         $collezione = Collezione::findOrFail($collezioneId);
         $artisti    = Artista::orderBy('cognome')->get();
-        $rarita     = Dizionario::where('categoria', 'rarita')->where('stato', 1)->get();
-        $tipi       = Dizionario::where('categoria', 'tipo')->where('stato', 1)->get();
+        $rarita     = CollezioneRarita::where('col_id_collezione', $collezioneId)->orderBy('nome')->get();
+        $tipologie  = CollezioneTipologia::where('col_id_collezione', $collezioneId)->orderBy('nome')->get();
 
-        return view('admin.carte.create', compact('collezione', 'artisti', 'rarita', 'tipi'));
+        return view('admin.carte.create', compact('collezione', 'artisti', 'rarita', 'tipologie'));
     }
 
     // Salva la nuova carta
@@ -94,8 +97,8 @@ class AdminCollezioneController extends Controller
             'titolo'         => 'required|string|max:255',
             'descrizione'    => 'nullable|string',
             'art_id_artista' => 'nullable|exists:artista,id_artista',
-            'dnz_id_rarita'  => 'nullable|exists:dizionario,id_dizionario',
-            'dnz_id_tipo'    => 'nullable|exists:dizionario,id_dizionario',
+            'rar_id_rarita'  => 'nullable|exists:collezione_rarita,id_collezione_rarita',
+            'tip_id_tipologia' => 'nullable|exists:collezione_tipologia,id_collezione_tipologia',
             'numero'         => 'nullable|integer|min:1',
             'immagine'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
         ]);
@@ -110,8 +113,8 @@ class AdminCollezioneController extends Controller
             'titolo'            => $request->titolo,
             'descrizione'       => $request->descrizione,
             'art_id_artista'    => $request->art_id_artista,
-            'dnz_id_rarita'     => $request->dnz_id_rarita,
-            'dnz_id_tipo'       => $request->dnz_id_tipo,
+            'rar_id_rarita'     => $request->rar_id_rarita,
+            'tip_id_tipologia'  => $request->tip_id_tipologia,
             'numero'            => $request->numero,
             'immagine_url'      => $immagineUrl,
         ]);

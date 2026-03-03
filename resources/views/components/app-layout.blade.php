@@ -14,7 +14,7 @@
     <div class="row w-100 d-flex justify-content-between align-items-center mx-5 px-5 py-3">
         <div class="col-12 col-md-3">
             <a class="navbar-brand" href="{{ route('home') }}">
-                <img src="{{ asset('img/logo_rubato.png') }}" alt="Logo" class="d-inline-block align-top" style="width: 15rem">
+                <img src="{{ asset('img/dario-moccia.png') }}" alt="Logo" class="d-inline-block align-top" style="width: 10rem; mix-blend-mode: multiply;">
             </a>
         </div>
         <div id="nav-bar-home" class="col-12 col-md-6">
