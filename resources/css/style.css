@@ -163,3 +163,25 @@ body {
     }
 
 }
+
+/* ── Rarity radio buttons (carta-card) ────────────────────────────── */
+
+/* Selected state: filled yellow background, darker text */
+.btn-check:checked + .btn-outline-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+    font-weight: 600;
+    box-shadow: 0 0 0 0.18rem rgba(255, 193, 7, 0.45);
+}
+
+/* Unselected: subtle ghost style */
+.btn-outline-warning:not(:has(+ *)):not(.active),
+.rarita-selector .btn-outline-warning {
+    opacity: 0.7;
+}
+
+/* Hover over unselected */
+.rarita-selector label.btn-outline-warning:hover {
+    opacity: 1;
+}

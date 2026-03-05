@@ -20,18 +20,18 @@
                 <select name="rarita" class="form-select">
                     <option value="">Tutte le rarità</option>
                     @foreach($rarita as $r)
-                        <option value="{{ $r->id_dizionario }}" {{ request('rarita') == $r->id_dizionario ? 'selected' : '' }}>
-                            {{ $r->descrizione }}
+                        <option value="{{ $r->id_collezione_rarita }}" {{ request('rarita') == $r->id_collezione_rarita ? 'selected' : '' }}>
+                            {{ $r->nome }}
                         </option>
                     @endforeach
                 </select>
             </div>
             <div class="col-md-3">
-                <select name="tipo" class="form-select">
-                    <option value="">Tutti i tipi</option>
-                    @foreach($tipi as $t)
-                        <option value="{{ $t->id_dizionario }}" {{ request('tipo') == $t->id_dizionario ? 'selected' : '' }}>
-                            {{ $t->descrizione }}
+                <select name="tipologia" class="form-select">
+                    <option value="">Tutte le tipologie</option>
+                    @foreach($tipologie as $t)
+                        <option value="{{ $t->id_collezione_tipologia }}" {{ request('tipologia') == $t->id_collezione_tipologia ? 'selected' : '' }}>
+                            {{ $t->nome }}
                         </option>
                     @endforeach
                 </select>
@@ -43,17 +43,59 @@
     </form>
 <div class="w-100 mx-auto px-5">
 
-    <div class="row">
+    <div class="row" id="cards-grid">
         @if($carte->isEmpty())
-            <p class="text-center">Nessuna carta trovata.</p>
+            <p class="text-center" id="no-cards-msg">Nessuna carta trovata.</p>
         @endif
-        @foreach($carte as $carta)
-            <x-carta-card :carta="$carta" />
-        @endforeach
+        @include('carte._cards', ['carte' => $carte])
     </div>
 
-    <div class="mt-4">
-        {{ $pagination->withQueryString()->links() }}
+    {{-- Sentinel for infinite scroll --}}
+    <div id="scroll-sentinel" class="mt-4 pb-4 text-center" style="min-height:40px;">
+        <div id="loading-spinner" class="spinner-border text-secondary" role="status" style="display:none;">
+            <span class="visually-hidden">Caricamento...</span>
+        </div>
     </div>
 </div>
+
+<script>
+(function () {
+    let hasMore  = @json($pagination->hasMorePages());
+    let nextPage = {{ $pagination->currentPage() + 1 }};
+    let loading  = false;
+
+    const grid     = document.getElementById('cards-grid');
+    const sentinel = document.getElementById('scroll-sentinel');
+    const spinner  = document.getElementById('loading-spinner');
+
+    if (!hasMore) return;
+
+    const observer = new IntersectionObserver(async function (entries) {
+        if (!entries[0].isIntersecting || loading || !hasMore) return;
+        loading = true;
+        spinner.style.display = 'inline-block';
+        try {
+            const params = new URLSearchParams(window.location.search);
+            params.set('page', nextPage);
+            const resp = await fetch('?' + params.toString(), {
+                headers: { 'Accept': 'application/json' },
+            });
+            const data = await resp.json();
+            const noMsg = document.getElementById('no-cards-msg');
+            if (noMsg) noMsg.remove();
+            grid.insertAdjacentHTML('beforeend', data.html);
+            hasMore  = data.hasMore;
+            nextPage = data.nextPage;
+        } catch (e) {
+            console.error('Lazy load error:', e);
+        } finally {
+            loading = false;
+            spinner.style.display   = 'none';
+            if (!hasMore) observer.disconnect();
+        }
+    }, { rootMargin: '300px' });
+
+    observer.observe(sentinel);
+})();
+</script>
 </x-app-layout>

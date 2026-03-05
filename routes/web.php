@@ -8,6 +8,9 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminCollezioneController;
 use App\Http\Controllers\Admin\AdminCartaController;
 use App\Http\Controllers\Admin\AdminArtistaController;
+use App\Http\Controllers\Admin\AdminCollezioneRaritaController;
+use App\Http\Controllers\Admin\AdminCollezioneTipologiaController;
+use App\Http\Controllers\Admin\AdminVersioneCollezioneController;
 
 Route::get('/', [CartaController::class, 'index'])->name('home');
 Route::get('/carte/{id}', [CartaController::class, 'show'])->name('carte.show');
@@ -50,6 +53,21 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Aggiunta carta a una collezione
     Route::get('/collezioni/{collezioneId}/carte/create',  [AdminCollezioneController::class, 'createCarta'])->name('collezioni.carta.create');
     Route::post('/collezioni/{collezioneId}/carte',        [AdminCollezioneController::class, 'storeCarta'])->name('collezioni.carta.store');
+
+    // Rarità per collezione
+    Route::post('/collezioni/{collezioneId}/rarita',            [AdminCollezioneRaritaController::class, 'store'])->name('collezioni.rarita.store');
+    Route::put('/collezioni/{collezioneId}/rarita/{id}',        [AdminCollezioneRaritaController::class, 'update'])->name('collezioni.rarita.update');
+    Route::delete('/collezioni/{collezioneId}/rarita/{id}',     [AdminCollezioneRaritaController::class, 'destroy'])->name('collezioni.rarita.destroy');
+
+    // Tipologie per collezione
+    Route::post('/collezioni/{collezioneId}/tipologie',         [AdminCollezioneTipologiaController::class, 'store'])->name('collezioni.tipologie.store');
+    Route::put('/collezioni/{collezioneId}/tipologie/{id}',     [AdminCollezioneTipologiaController::class, 'update'])->name('collezioni.tipologie.update');
+    Route::delete('/collezioni/{collezioneId}/tipologie/{id}',  [AdminCollezioneTipologiaController::class, 'destroy'])->name('collezioni.tipologie.destroy');
+
+    // Versioni alternative per collezione
+    Route::post('/collezioni/{collezioneId}/versioni',          [AdminVersioneCollezioneController::class, 'store'])->name('collezioni.versioni.store');
+    Route::put('/collezioni/{collezioneId}/versioni/{id}',      [AdminVersioneCollezioneController::class, 'update'])->name('collezioni.versioni.update');
+    Route::delete('/collezioni/{collezioneId}/versioni/{id}',   [AdminVersioneCollezioneController::class, 'destroy'])->name('collezioni.versioni.destroy');
 
     // Modifica / eliminazione carta
     Route::get('/carte/{id}/edit',     [AdminCartaController::class, 'edit'])->name('carte.edit');

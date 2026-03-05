@@ -8,8 +8,22 @@
         <h2>{{ $carta->titolo }}</h2>
         <p><strong>Collezione:</strong> {{ $carta->collezione->nome ?? '-' }}</p>
         <p><strong>Artista:</strong> {{ $carta->artista->nome ?? '-' }} {{ $carta->artista->cognome ?? '' }}</p>
-        <p><strong>Rarità:</strong> {{ $carta->rarita->descrizione ?? '-' }}</p>
-        <p><strong>Tipo:</strong> {{ $carta->tipo->descrizione ?? '-' }}</p>
+        <p><strong>Rarità:</strong>
+            @forelse($carta->raritas as $r)
+                <x-icona-badge :record="$r" size="18px" class="me-1" />
+                {{ $r->nome }}@if(!$loop->last), @endif
+            @empty
+                —
+            @endforelse
+        </p>
+        <p><strong>Tipo:</strong>
+            @forelse($carta->tipologie as $t)
+                <x-icona-badge :record="$t" size="18px" class="me-1" />
+                {{ $t->nome }}@if(!$loop->last), @endif
+            @empty
+                —
+            @endforelse
+        </p>
         <p>{{ $carta->descrizione }}</p>
         <a href="{{ route('home') }}" class="btn btn-secondary mt-3">Torna all'elenco</a>
         @auth
