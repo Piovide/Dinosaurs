@@ -47,24 +47,24 @@
                             <td class="fw-semibold">{{ $carta->titolo }}</td>
                             <td>{{ $carta->artista?->cognome }} {{ $carta->artista?->nome }}</td>
                             <td>
-                                @if($carta->rarita)
+                                @forelse($carta->raritas as $r)
                                     <span class="badge bg-warning text-dark d-inline-flex align-items-center gap-1">
-                                        <x-icona-badge :record="$carta->rarita" size="14px" />
-                                        {{ $carta->rarita->nome }}
+                                        <x-icona-badge :record="$r" size="14px" />
+                                        {{ $r->nome }}
                                     </span>
-                                @else
+                                @empty
                                     <span class="text-muted">—</span>
-                                @endif
+                                @endforelse
                             </td>
                             <td>
-                                @if($carta->tipologia)
+                                @forelse($carta->tipologie as $t)
                                     <span class="d-inline-flex align-items-center gap-1">
-                                        <x-icona-badge :record="$carta->tipologia" size="14px" />
-                                        {{ $carta->tipologia->nome }}
-                                    </span>
-                                @else
+                                        <x-icona-badge :record="$t" size="14px" />
+                                        {{ $t->nome }}
+                                    </span>@if(!$loop->last), @endif
+                                @empty
                                     <span class="text-muted">—</span>
-                                @endif
+                                @endforelse
                             </td>
                             <td class="text-end">
                                 <a href="{{ route('carte.show', $carta->id_carta) }}"
@@ -262,6 +262,53 @@
                             </div>
                             <div class="col-sm-auto">
                                 <button type="submit" class="btn btn-sm btn-info">+ Aggiungi</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Versioni Alternative --}}
+    <div class="row g-4 mt-1">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-secondary bg-opacity-15"><strong>Versioni Alternative della Collezione</strong></div>
+                <div class="card-body p-0">
+                    <table class="table table-sm mb-0 align-middle">
+                        <thead class="table-light"><tr><th>Nome</th><th style="width:60px;"></th></tr></thead>
+                        <tbody>
+                            @forelse($versioni as $v)
+                                <tr>
+                                    <td>{{ $v->nome }}</td>
+                                    <td class="text-end">
+                                        <form method="POST"
+                                              action="{{ route('admin.collezioni.versioni.destroy', [$collezione->id_collezione, $v->id_versione]) }}"
+                                              class="d-inline"
+                                              onsubmit="return confirm('Eliminare la versione {{ addslashes($v->nome) }}?')">
+                                            @csrf @method('DELETE')
+                                            <button class="btn btn-sm btn-outline-danger py-0">✕</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="2" class="text-muted small text-center py-2">Nessuna versione alternativa definita.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <form method="POST" action="{{ route('admin.collezioni.versioni.store', $collezione->id_collezione) }}">
+                        @csrf
+                        <div class="row g-2 align-items-end">
+                            <div class="col">
+                                <label class="form-label small mb-1">Nome <span class="text-danger">*</span></label>
+                                <input type="text" name="nome" class="form-control form-control-sm"
+                                       placeholder="es. Olografica, 1ª Edizione, Promo" required>
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-sm btn-secondary">+ Aggiungi</button>
                             </div>
                         </div>
                     </form>

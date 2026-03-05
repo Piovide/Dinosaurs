@@ -13,7 +13,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4" id="main-navbar">
     <div class="row w-100 d-flex justify-content-between align-items-center mx-5 px-5 py-3">
         <div class="col-12 col-md-3">
-            <a class="navbar-brand" href="{{ route('home') }}">
+            <a class="navbar-brand navbar-nav ms-auto gap-3 mb-2 mb-lg-0 d-flex flex-row align-items-center justify-content-center" href="{{ route('home') }}">
                 <img src="{{ asset('img/dario-moccia.png') }}" alt="Logo" class="d-inline-block align-top" style="width: 10rem; mix-blend-mode: multiply;">
             </a>
         </div>

@@ -1,34 +1,42 @@
 {{--
   Partial: admin/carte/_tipologia_field.blade.php
-  Props: $tipologie (collection), $selectedTipologiaId (nullable), $collezioneId (int)
+  Props: $tipologie (collection), $selectedTipologiaIds (array), $collezioneId (int)
 --}}
-@php $biSprite2 = asset('/build/assets/svg/bootstrap-icons.svg'); @endphp
+@php
+    $biSprite2 = asset('/build/assets/svg/bootstrap-icons.svg');
+    $selectedTipologiaIds = $selectedTipologiaIds ?? [];
+@endphp
 
 <div class="col-md-6" id="tipologia-field-wrapper">
-    <label class="form-label fw-semibold">Tipologia</label>
-    <div class="input-group">
-        <span class="input-group-text bg-transparent p-0" id="tipologia-icon-live"
-              style="min-width:38px;justify-content:center;display:none;"></span>
-        <select name="tip_id_tipologia" id="tip_id_tipologia"
-                class="form-select @error('tip_id_tipologia') is-invalid @enderror"
-                onchange="updateTipologiaPreview(this.value)">
-            <option value="">— Nessuna —</option>
-            @foreach($tipologie as $t)
-                <option value="{{ $t->id_collezione_tipologia }}"
-                        data-tipo="{{ $t->tipo_icona }}"
-                        data-icona-val="{{ $t->icona }}"
-                        data-icona-url="{{ $t->icona_url }}"
-                    {{ old('tip_id_tipologia', $selectedTipologiaId ?? '') == $t->id_collezione_tipologia ? 'selected' : '' }}>
+    <label class="form-label fw-semibold">Tipologie</label>
+
+    <div id="tipologia-checkboxes" class="d-flex flex-column gap-1 mb-2">
+        @forelse($tipologie as $t)
+            <div class="form-check d-flex align-items-center gap-2">
+                <input class="form-check-input" type="checkbox"
+                       name="tipologia_ids[]"
+                       id="tipologia_cb_{{ $t->id_collezione_tipologia }}"
+                       value="{{ $t->id_collezione_tipologia }}"
+                       {{ in_array($t->id_collezione_tipologia, (array) $selectedTipologiaIds) ? 'checked' : '' }}>
+                <label class="form-check-label d-inline-flex align-items-center gap-1"
+                       for="tipologia_cb_{{ $t->id_collezione_tipologia }}">
+                    @if($t->has_icona)
+                        <x-icona-badge :record="$t" size="16px" />
+                    @endif
                     {{ $t->nome }}
-                </option>
-            @endforeach
-        </select>
-        <button type="button" class="btn btn-outline-success"
-                onclick="toggleNewTipologiaForm()" title="Crea nuova tipologia">
-            &#43; Nuova
-        </button>
+                </label>
+            </div>
+        @empty
+            <p class="text-muted small mb-1">Nessuna tipologia definita per questa collezione.</p>
+        @endforelse
     </div>
-    @error('tip_id_tipologia')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+
+    @error('tipologia_ids')
+        <div class="text-danger small mb-1">{{ $message }}</div>
+    @enderror
+
+    <button type="button" class="btn btn-sm btn-outline-info"
+            onclick="toggleNewTipologiaForm()">&#43; Nuova tipologia</button>
 </div>
 
 {{-- Inline create panel --}}
@@ -88,7 +96,7 @@
             </div>
         </div>
         <div class="mt-2 d-flex gap-2 align-items-center">
-            <button type="button" class="btn btn-info btn-sm" onclick="saveNewTipologia()">Crea e seleziona</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="saveNewTipologia()">Crea e aggiungi</button>
             <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggleNewTipologiaForm()">Annulla</button>
             <span id="new-tipologia-feedback" class="small"></span>
         </div>
@@ -96,23 +104,6 @@
 </div>
 
 <script>
-const _tipBiSprite = '{{ $biSprite2 }}';
-
-function updateTipologiaPreview(val) {
-    const live = document.getElementById('tipologia-icon-live');
-    live.innerHTML = '';
-    live.style.display = 'none';
-    if (!val) return;
-    const opt = document.querySelector(`#tip_id_tipologia option[value="${val}"]`);
-    if (!opt) return;
-    const tipo = opt.dataset.tipo, iconaVal = opt.dataset.iconaVal, iconaUrl = opt.dataset.iconaUrl;
-    if ((tipo === 'bootstrap' && iconaVal) || iconaUrl) {
-        renderIconInto(live, tipo, iconaVal, iconaUrl, _tipBiSprite, 22);
-        live.style.display = 'flex';
-    }
-}
-(function(){ const s = document.getElementById('tip_id_tipologia'); if(s && s.value) updateTipologiaPreview(s.value); })();
-
 function toggleNewTipologiaForm() {
     const f = document.getElementById('new-tipologia-form');
     f.style.display = f.style.display === 'none' ? 'block' : 'none';
@@ -138,24 +129,32 @@ function saveNewTipologia() {
         method: 'POST', headers: { 'Accept': 'application/json' }, body: fd,
     }).then(r => r.json()).then(data => {
         if (!data.id) { fb.textContent = data.message ?? 'Errore.'; fb.className = 'small text-danger'; return; }
-        const sel = document.getElementById('tip_id_tipologia');
-        const opt = document.createElement('option');
-        opt.value = data.id; opt.text = data.label;
-        opt.dataset.tipo = data.tipo_icona ?? '';
-        opt.dataset.iconaVal = data.icona_val ?? '';
-        opt.dataset.iconaUrl = data.icona_url ?? '';
-        opt.selected = true;
-        sel.appendChild(opt); sel.value = data.id;
-        updateTipologiaPreview(data.id);
-        fb.textContent = '✓ Tipologia creata e selezionata.'; fb.className = 'small text-success';
+        const container = document.getElementById('tipologia-checkboxes');
+        const placeholder = container.querySelector('p.text-muted');
+        if (placeholder) placeholder.remove();
+        const wrapper = document.createElement('div');
+        wrapper.className = 'form-check d-flex align-items-center gap-2';
+        wrapper.innerHTML = `<input class="form-check-input" type="checkbox" name="tipologia_ids[]" id="tipologia_cb_${data.id}" value="${data.id}" checked><label class="form-check-label" for="tipologia_cb_${data.id}">${data.label}</label>`;
+        container.appendChild(wrapper);
+        fb.textContent = '✓ Tipologia creata e aggiunta.'; fb.className = 'small text-success';
         document.getElementById('new_tipologia_nome').value = '';
         document.getElementById('new_tipologia_tipo').value = '';
-        document.getElementById('new_tipologia_bi').value = '';
-        document.getElementById('new_tipologia_file').value = '';
-        document.getElementById('new-tipologia-bi-prev').innerHTML = '';
-        document.getElementById('new-tipologia-file-prev').style.display = 'none';
         toggleTipologiaIconaType();
         setTimeout(() => { document.getElementById('new-tipologia-form').style.display = 'none'; fb.textContent = ''; }, 1500);
     }).catch(() => { fb.textContent = 'Errore di rete.'; fb.className = 'small text-danger'; });
+}
+if (typeof previewSvg === 'undefined') {
+    window.previewSvg = function(targetId, name, sprite) {
+        const el = document.getElementById(targetId);
+        if (!el) return;
+        el.innerHTML = name ? `<svg style="width:26px;height:26px;vertical-align:middle;"><use href="${sprite}#${name}"></use></svg>` : '';
+    };
+    window.previewImgFile = function(input, targetId) {
+        const img = document.getElementById(targetId);
+        if (!img || !input.files || !input.files[0]) return;
+        const reader = new FileReader();
+        reader.onload = e => { img.src = e.target.result; img.style.display = 'inline'; };
+        reader.readAsDataURL(input.files[0]);
+    };
 }
 </script>

@@ -32,7 +32,6 @@ class CartaSeeder extends Seeder
         }
 
         // Resolve IDs by name
-        $rarComune   = DB::table('collezione_rarita')->where('col_id_collezione', $colId)->where('nome', 'Comune')->value('id_collezione_rarita');
         $rarRara     = DB::table('collezione_rarita')->where('col_id_collezione', $colId)->where('nome', 'Rara')->value('id_collezione_rarita');
         $tipSaur     = DB::table('collezione_tipologia')->where('col_id_collezione', $colId)->where('nome', 'Saurischi')->value('id_collezione_tipologia');
 
@@ -42,8 +41,6 @@ class CartaSeeder extends Seeder
                 'titolo'            => 'T-Rex',
                 'descrizione'       => 'Il re dei dinosauri.',
                 'art_id_artista'    => 1,
-                'rar_id_rarita'     => $rarComune,
-                'tip_id_tipologia'  => $tipSaur,
                 'numero'            => 1,
                 'immagine_url'      => 'dinosaurs/TEST_1.png',
             ],
@@ -52,11 +49,31 @@ class CartaSeeder extends Seeder
                 'titolo'            => 'Triceratops',
                 'descrizione'       => 'Dinosauro con tre corna.',
                 'art_id_artista'    => 2,
-                'rar_id_rarita'     => $rarRara,
-                'tip_id_tipologia'  => $tipSaur,
                 'numero'            => 2,
                 'immagine_url'      => 'dinosaurs/TEST_2.png',
             ],
+        ]);
+
+        // Seed tipologie + rarità per carta via pivots
+        $trexId        = DB::table('carta')->where('titolo', 'T-Rex')->value('id_carta');
+        $triceratopsId = DB::table('carta')->where('titolo', 'Triceratops')->value('id_carta');
+
+        DB::table('carta_tipologia')->insertOrIgnore([
+            ['id_carta' => $trexId,        'id_collezione_tipologia' => $tipSaur, 'created_at' => now(), 'updated_at' => now()],
+            ['id_carta' => $triceratopsId, 'id_collezione_tipologia' => $tipSaur, 'created_at' => now(), 'updated_at' => now()],
+        ]);
+
+        // Seed rarità per carta via pivot rarita_carta
+        $rarUltraRara = DB::table('collezione_rarita')
+            ->where('col_id_collezione', $colId)
+            ->where('nome', 'Ultra Rara')
+            ->value('id_collezione_rarita');
+
+        DB::table('rarita_carta')->insertOrIgnore([
+            // T-Rex: Ultra Rara (una sola rarità per carta)
+            ['id_carta' => $trexId, 'id_collezione_rarita' => $rarUltraRara, 'created_at' => now(), 'updated_at' => now()],
+            // Triceratops: Rara
+            ['id_carta' => $triceratopsId, 'id_collezione_rarita' => $rarRara, 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }

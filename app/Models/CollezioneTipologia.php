@@ -17,7 +17,7 @@ class CollezioneTipologia extends Model
 
     public function carte()
     {
-        return $this->hasMany(Carta::class, 'tip_id_tipologia', 'id_collezione_tipologia');
+        return $this->belongsToMany(Carta::class, 'carta_tipologia', 'id_collezione_tipologia', 'id_carta');
     }
 
     /**

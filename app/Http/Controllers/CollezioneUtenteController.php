@@ -7,6 +7,7 @@ use App\Models\CollezioneRarita;
 use App\Models\CollezioneTipologia;
 use App\Models\CollezioneUtente;
 use App\Models\Utente;
+use App\Models\VersioneCollezione;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -18,28 +19,36 @@ class CollezioneUtenteController extends Controller
     public function aggiorna(Request $request)
     {
         $request->validate([
-            'car_id_carta' => 'required|exists:carta,id_carta',
-            'quantita' => 'required|integer|min:0'
+            'car_id_carta'             => 'required|exists:carta,id_carta',
+            'quantita'                 => 'required|integer|min:0',
+            'rar_id_collezione_rarita' => 'nullable|exists:collezione_rarita,id_collezione_rarita',
+            'ver_id_versione'          => 'nullable|exists:versione_collezione,id_versione',
         ]);
 
-        $utenteId = Auth::id();
-        $cartaId = $request->car_id_carta;
-        $quantita = $request->quantita;
+        $utenteId  = Auth::id();
+        $cartaId   = $request->car_id_carta;
+        $quantita  = $request->quantita;
+        $raritaId  = $request->rar_id_collezione_rarita ?? null;
+        $versioneId = $request->ver_id_versione ?? null;
 
         try {
             if ($quantita > 0) {
                 CollezioneUtente::updateOrCreate(
                     [
-                        'utn_id_utente' => $utenteId,
-                        'car_id_carta' => $cartaId
+                        'utn_id_utente'            => $utenteId,
+                        'car_id_carta'             => $cartaId,
+                        'rar_id_collezione_rarita' => $raritaId,
+                        'ver_id_versione'          => $versioneId,
                     ],
                     [
-                        'quantita' => $quantita
+                        'quantita' => $quantita,
                     ]
                 );
             } else {
                 CollezioneUtente::where('utn_id_utente', $utenteId)
                     ->where('car_id_carta', $cartaId)
+                    ->where('rar_id_collezione_rarita', $raritaId)
+                    ->where('ver_id_versione', $versioneId)
                     ->delete();
             }
 
@@ -81,16 +90,16 @@ class CollezioneUtenteController extends Controller
         $utente   = Utente::where('username', $username)->firstOrFail();
         $cartaIds = CollezioneUtente::where('utn_id_utente', $utente->id_utente)->pluck('car_id_carta');
 
-        $query = Carta::with(['collezione', 'artista', 'rarita', 'tipologia'])
+        $query = Carta::with(['collezione', 'artista', 'raritas', 'versioni', 'tipologie'])
             ->whereIn('id_carta', $cartaIds)
             ->orderBy('id_carta');
 
         if ($request->filled('rarita')) {
-            $query->where('rar_id_rarita', $request->rarita);
+            $query->whereHas('raritas', fn ($q) => $q->where('collezione_rarita.id_collezione_rarita', $request->rarita));
         }
 
         if ($request->filled('tipologia')) {
-            $query->where('tip_id_tipologia', $request->tipologia);
+            $query->whereHas('tipologie', fn($q) => $q->where('id_collezione_tipologia', $request->tipologia));
         }
 
         $pagination = $query->paginate(12);

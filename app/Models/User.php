@@ -83,4 +83,11 @@ class User extends Authenticatable {
     {
         return $this->hasMany(CollezioneUtente::class, 'utn_id_utente', 'id_utente');
     }
+    /**
+     * Relazione con collezioni utente
+     */
+    public function collezione_utente()
+    {
+        return $this->hasMany(CollezioneUtente::class, 'utn_id_utente', 'id_utente');
+    }
 }

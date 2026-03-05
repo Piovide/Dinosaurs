@@ -12,18 +12,18 @@ class CartaController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Carta::with(['collezione', 'artista', 'rarita', 'tipologia']);
+        $query = Carta::with(['collezione', 'artista', 'raritas', 'versioni', 'tipologie']);
 
         if ($request->filled('collezione')) {
             $query->where('col_id_collezione', $request->collezione);
         }
 
         if ($request->filled('rarita')) {
-            $query->where('rar_id_rarita', $request->rarita);
+            $query->whereHas('raritas', fn ($q) => $q->where('collezione_rarita.id_collezione_rarita', $request->rarita));
         }
 
         if ($request->filled('tipologia')) {
-            $query->where('tip_id_tipologia', $request->tipologia);
+            $query->whereHas('tipologie', fn($q) => $q->where('id_collezione_tipologia', $request->tipologia));
         }
 
         $pagination = $query->paginate(12);
@@ -58,7 +58,7 @@ class CartaController extends Controller
 
     public function show($id)
     {
-        $carta = Carta::with(['collezione', 'artista', 'rarita', 'tipologia'])->findOrFail($id);
+        $carta = Carta::with(['collezione', 'artista', 'raritas', 'versioni', 'tipologie'])->findOrFail($id);
         return view('carte.show', compact('carta'));
     }
 }

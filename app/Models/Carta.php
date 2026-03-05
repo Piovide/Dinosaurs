@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Services\CartaImageService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\VersioneCollezione;
+use App\Models\CollezioneTipologia;
 
 class Carta extends Model
 {
@@ -17,19 +19,27 @@ class Carta extends Model
         'titolo',
         'descrizione',
         'art_id_artista',
-        'rar_id_rarita',
-        'tip_id_tipologia',
         'numero',
+        'prefisso',
         'immagine_url',
+        'immagine_retro_url',
     ];
 
     /**
-     * Returns the full public asset URL for the card image, or null if not set.
+     * Returns the full public asset URL for the card front image, or null if not set.
      * DB stores a relative path like "{collection-slug}/{filename}".
      */
     public function getImmagineAssetAttribute(): ?string
     {
         return app(CartaImageService::class)->assetUrl($this->immagine_url);
+    }
+
+    /**
+     * Returns the full public asset URL for the card back image, or null if not set.
+     */
+    public function getImmagineRetroAssetAttribute(): ?string
+    {
+        return app(CartaImageService::class)->assetUrl($this->immagine_retro_url);
     }
 
     public function collezione()
@@ -42,13 +52,42 @@ class Carta extends Model
         return $this->belongsTo(Artista::class, 'art_id_artista', 'id_artista');
     }
 
-    public function rarita()
+    /**
+     * A card can have multiple rarity versions.
+     */
+    public function raritas()
     {
-        return $this->belongsTo(CollezioneRarita::class, 'rar_id_rarita', 'id_collezione_rarita');
+        return $this->belongsToMany(
+            CollezioneRarita::class,
+            'rarita_carta',
+            'id_carta',
+            'id_collezione_rarita'
+        )->withTimestamps();
     }
 
-    public function tipologia()
+    /**
+     * A card can belong to multiple tipologie.
+     */
+    public function tipologie()
     {
-        return $this->belongsTo(CollezioneTipologia::class, 'tip_id_tipologia', 'id_collezione_tipologia');
+        return $this->belongsToMany(
+            CollezioneTipologia::class,
+            'carta_tipologia',
+            'id_carta',
+            'id_collezione_tipologia'
+        )->withTimestamps();
+    }
+
+    /**
+     * Alternative versions of this card (from the collection's version list).
+     */
+    public function versioni()
+    {
+        return $this->belongsToMany(
+            VersioneCollezione::class,
+            'carta_versione',
+            'id_carta',
+            'id_versione'
+        )->withTimestamps();
     }
 }

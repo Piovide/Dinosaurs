@@ -35,12 +35,24 @@
                                value="{{ old('numero') }}">
                         @error('numero')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Prefisso</label>
+                        <input type="text" name="prefisso" maxlength="20"
+                               class="form-control @error('prefisso') is-invalid @enderror"
+                               value="{{ old('prefisso') }}"
+                               placeholder="es. SD, SP">
+                        @error('prefisso')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
                     @include('admin.carte._artista_field', ['selectedArtistaId' => null])
                 </div>
 
                 <div class="row g-3 mb-3">
                     @include('admin.carte._rarita_field', ['selectedRaritaId' => null, 'collezioneId' => $collezione->id_collezione])
-                    @include('admin.carte._tipologia_field', ['selectedTipologiaId' => null, 'collezioneId' => $collezione->id_collezione])
+                    @include('admin.carte._tipologia_field', ['selectedTipologiaIds' => [], 'tipologie' => $tipologie, 'collezioneId' => $collezione->id_collezione])
+                </div>
+
+                <div class="row g-3 mb-3">
+                    @include('admin.carte._versione_field', ['selectedVersioneIds' => [], 'versioni' => $versioni, 'collezioneId' => $collezione->id_collezione])
                 </div>
 
                 <div class="mb-4">

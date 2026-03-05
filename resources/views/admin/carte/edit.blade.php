@@ -50,12 +50,24 @@
                                value="{{ old('numero', $carta->numero) }}">
                         @error('numero')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Prefisso</label>
+                        <input type="text" name="prefisso" maxlength="20"
+                               class="form-control @error('prefisso') is-invalid @enderror"
+                               value="{{ old('prefisso', $carta->prefisso) }}"
+                               placeholder="es. SD, SP">
+                        @error('prefisso')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
                     @include('admin.carte._artista_field', ['selectedArtistaId' => $carta->art_id_artista])
                 </div>
 
                 <div class="row g-3 mb-3">
-                    @include('admin.carte._rarita_field', ['selectedRaritaId' => $carta->rar_id_rarita, 'collezioneId' => $carta->col_id_collezione])
-                    @include('admin.carte._tipologia_field', ['selectedTipologiaId' => $carta->tip_id_tipologia, 'collezioneId' => $carta->col_id_collezione])
+                    @include('admin.carte._rarita_field', ['selectedRaritaId' => $carta->raritas->first()?->id_collezione_rarita, 'collezioneId' => $carta->col_id_collezione])
+                    @include('admin.carte._tipologia_field', ['selectedTipologiaIds' => $carta->tipologie->pluck('id_collezione_tipologia')->toArray(), 'tipologie' => $tipologie, 'collezioneId' => $carta->col_id_collezione])
+                </div>
+
+                <div class="row g-3 mb-3">
+                    @include('admin.carte._versione_field', ['selectedVersioneIds' => $carta->versioni->pluck('id_versione')->toArray(), 'versioni' => $versioni, 'collezioneId' => $carta->col_id_collezione])
                 </div>
 
                 <div class="mb-4">

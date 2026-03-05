@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 class Collezione extends Model
 {
     use HasFactory;
@@ -23,5 +22,9 @@ class Collezione extends Model
 
     public function tipologie(){
         return $this->hasMany(CollezioneTipologia::class, 'col_id_collezione', 'id_collezione');
+    }
+
+    public function versioni(){
+        return $this->hasMany(VersioneCollezione::class, 'col_id_collezione', 'id_collezione');
     }
 }

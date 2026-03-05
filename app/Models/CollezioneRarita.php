@@ -15,9 +15,17 @@ class CollezioneRarita extends Model
         return $this->belongsTo(Collezione::class, 'col_id_collezione', 'id_collezione');
     }
 
+    /**
+     * All cards that carry this rarity (many-to-many via rarita_carta).
+     */
     public function carte()
     {
-        return $this->hasMany(Carta::class, 'rar_id_rarita', 'id_collezione_rarita');
+        return $this->belongsToMany(
+            Carta::class,
+            'rarita_carta',
+            'id_collezione_rarita',
+            'id_carta'
+        )->withTimestamps();
     }
 
     /**

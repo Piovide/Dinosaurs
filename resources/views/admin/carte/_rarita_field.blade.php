@@ -1,34 +1,29 @@
 {{--
   Partial: admin/carte/_rarita_field.blade.php
-  Props: $rarita (collection), $selectedRaritaId (nullable), $collezioneId (int)
+  Props: $rarita (collection), $selectedRaritaId (nullable int), $collezioneId (int)
 --}}
-@php $biSprite = asset('/build/assets/svg/bootstrap-icons.svg'); @endphp
+@php
+    $biSprite = asset('/build/assets/svg/bootstrap-icons.svg');
+    $selectedRaritaId = old('rar_id_collezione_rarita', $selectedRaritaId ?? null);
+@endphp
 
 <div class="col-md-6" id="rarita-field-wrapper">
     <label class="form-label fw-semibold">Rarità</label>
     <div class="input-group">
-        <span class="input-group-text bg-transparent p-0" id="rarita-icon-live"
-              style="min-width:38px;justify-content:center;display:none;"></span>
-        <select name="rar_id_rarita" id="rar_id_rarita"
-                class="form-select @error('rar_id_rarita') is-invalid @enderror"
-                onchange="updateRaritaPreview(this.value)">
+        <select name="rar_id_collezione_rarita" id="rar_id_collezione_rarita"
+                class="form-select @error('rar_id_collezione_rarita') is-invalid @enderror">
             <option value="">— Nessuna —</option>
             @foreach($rarita as $r)
                 <option value="{{ $r->id_collezione_rarita }}"
-                        data-tipo="{{ $r->tipo_icona }}"
-                        data-icona-val="{{ $r->icona }}"
-                        data-icona-url="{{ $r->icona_url }}"
-                    {{ old('rar_id_rarita', $selectedRaritaId ?? '') == $r->id_collezione_rarita ? 'selected' : '' }}>
+                    {{ $selectedRaritaId == $r->id_collezione_rarita ? 'selected' : '' }}>
                     {{ $r->nome }}
                 </option>
             @endforeach
         </select>
         <button type="button" class="btn btn-outline-success"
-                onclick="toggleNewRaritaForm()" title="Crea nuova rarità">
-            &#43; Nuova
-        </button>
+                onclick="toggleNewRaritaForm()" title="Crea nuova rarità">&#43; Nuova</button>
     </div>
-    @error('rar_id_rarita')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+    @error('rar_id_collezione_rarita')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
 </div>
 
 {{-- Inline create panel --}}
@@ -74,7 +69,7 @@
                 </div>
             </div>
             <div class="col d-none" id="new-rarita-file-group">
-                <label class="form-label small fw-semibold">File (max 1&nbsp;MB)</label>
+                <label class="form-label small fw-semibold">File (max 1 MB)</label>
                 <input type="file" id="new_rarita_file" accept="image/*"
                        class="form-control form-control-sm"
                        onchange="previewImgFile(this,'new-rarita-file-prev')">
@@ -83,7 +78,7 @@
             </div>
         </div>
         <div class="mt-2 d-flex gap-2 align-items-center">
-            <button type="button" class="btn btn-success btn-sm" onclick="saveNewRarita()">Crea e seleziona</button>
+            <button type="button" class="btn btn-success btn-sm" onclick="saveNewRarita()">Crea e aggiungi</button>
             <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggleNewRaritaForm()">Annulla</button>
             <span id="new-rarita-feedback" class="small"></span>
         </div>
@@ -91,23 +86,6 @@
 </div>
 
 <script>
-const _rarBiSprite = '{{ $biSprite }}';
-
-function updateRaritaPreview(val) {
-    const live = document.getElementById('rarita-icon-live');
-    live.innerHTML = '';
-    live.style.display = 'none';
-    if (!val) return;
-    const opt = document.querySelector(`#rar_id_rarita option[value="${val}"]`);
-    if (!opt) return;
-    const tipo = opt.dataset.tipo, iconaVal = opt.dataset.iconaVal, iconaUrl = opt.dataset.iconaUrl;
-    if ((tipo === 'bootstrap' && iconaVal) || iconaUrl) {
-        renderIconInto(live, tipo, iconaVal, iconaUrl, _rarBiSprite, 22);
-        live.style.display = 'flex';
-    }
-}
-(function(){ const s = document.getElementById('rar_id_rarita'); if(s && s.value) updateRaritaPreview(s.value); })();
-
 function toggleNewRaritaForm() {
     const f = document.getElementById('new-rarita-form');
     f.style.display = f.style.display === 'none' ? 'block' : 'none';
@@ -122,46 +100,28 @@ function saveNewRarita() {
     const tipo = document.getElementById('new_rarita_tipo').value;
     const fb   = document.getElementById('new-rarita-feedback');
     if (!nome) { fb.textContent = 'Il nome è obbligatorio.'; fb.className = 'small text-danger'; return; }
-    fb.textContent = 'Salvataggio…'; fb.className = 'small text-muted';
+    fb.textContent = 'Salvataggio...'; fb.className = 'small text-muted';
     const fd = new FormData();
     fd.append('nome', nome);
     fd.append('_token', document.querySelector('meta[name="csrf-token"]').content);
     if (tipo) fd.append('tipo_icona', tipo);
     if (tipo === 'bootstrap') { const v = document.getElementById('new_rarita_bi').value.trim(); if(v) fd.append('icona_bootstrap', v); }
     if (tipo === 'file') { const f2 = document.getElementById('new_rarita_file'); if(f2.files[0]) fd.append('icona', f2.files[0]); }
-    fetch('{{ route('admin.collezioni.rarita.store', $collezioneId) }}', {
+    fetch('{{ route("admin.collezioni.rarita.store", $collezioneId) }}', {
         method: 'POST', headers: { 'Accept': 'application/json' }, body: fd,
     }).then(r => r.json()).then(data => {
         if (!data.id) { fb.textContent = data.message ?? 'Errore.'; fb.className = 'small text-danger'; return; }
-        const sel = document.getElementById('rar_id_rarita');
-        const opt = document.createElement('option');
-        opt.value = data.id; opt.text = data.label;
-        opt.dataset.tipo = data.tipo_icona ?? '';
-        opt.dataset.iconaVal = data.icona_val ?? '';
-        opt.dataset.iconaUrl = data.icona_url ?? '';
-        opt.selected = true;
-        sel.appendChild(opt); sel.value = data.id;
-        updateRaritaPreview(data.id);
-        fb.textContent = '✓ Rarità creata e selezionata.'; fb.className = 'small text-success';
+        const sel = document.getElementById('rar_id_collezione_rarita');
+        const opt = new Option(data.label, data.id, false, true);
+        sel.add(opt);
+        fb.textContent = 'Rarità creata e selezionata.'; fb.className = 'small text-success';
         document.getElementById('new_rarita_nome').value = '';
         document.getElementById('new_rarita_tipo').value = '';
-        document.getElementById('new_rarita_bi').value = '';
-        document.getElementById('new_rarita_file').value = '';
-        document.getElementById('new-rarita-bi-prev').innerHTML = '';
-        document.getElementById('new-rarita-file-prev').style.display = 'none';
         toggleRaritaIconaType();
         setTimeout(() => { document.getElementById('new-rarita-form').style.display = 'none'; fb.textContent = ''; }, 1500);
     }).catch(() => { fb.textContent = 'Errore di rete.'; fb.className = 'small text-danger'; });
 }
-// Shared helpers (guarded to avoid redefinition)
-if (typeof renderIconInto === 'undefined') {
-    window.renderIconInto = function(el, tipo, val, url, sprite, size) {
-        if (tipo === 'bootstrap' && val) {
-            el.innerHTML = `<svg style="width:${size}px;height:${size}px;vertical-align:middle;"><use href="${sprite}#${val}"></use></svg>`;
-        } else if (url) {
-            el.innerHTML = `<img src="${url}" alt="" style="height:${size}px;vertical-align:middle;border-radius:3px;">`;
-        } else { el.innerHTML = ''; }
-    };
+if (typeof previewSvg === 'undefined') {
     window.previewSvg = function(targetId, name, sprite) {
         const el = document.getElementById(targetId);
         if (!el) return;
