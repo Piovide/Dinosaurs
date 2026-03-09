@@ -17,15 +17,6 @@
     <meta property="og:type" content="website">
     <link rel="canonical" href="https://www.tomodachi-tracker.it">
     <title>{{ $title }}</title>
-    <script type="application/ld+json">
-        {
-         "@context": "https://schema.org",
-         "@type": "WebSite",
-         "name": "Tomodachi Tracker",
-         "url": "https://www.tomodachi-tracker.it",
-         "description": "Gestisci e traccia la tua collezione di carte Tomodachi."
-        }
-    </script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4" id="main-navbar">
