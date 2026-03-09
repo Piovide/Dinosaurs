@@ -164,6 +164,7 @@ function initCartaImageZoom() {
     const imgInModal = modal.querySelector('img');
 
     cartaImages.forEach(img => {
+        // Handle click (desktop)
         img.addEventListener('click', (e) => {
             e.stopPropagation();
             imgInModal.src = img.src;
@@ -172,11 +173,24 @@ function initCartaImageZoom() {
 
             initModal3DEffect(modal);
         });
+
+        // Handle touch (mobile) - open modal on first tap
+        img.addEventListener('touchstart', (e) => {
+            // Check if modal is already active
+            if (!modal.classList.contains('active')) {
+                e.preventDefault();
+                imgInModal.src = img.src;
+                imgInModal.alt = img.alt;
+                modal.classList.add('active');
+
+                initModal3DEffect(modal);
+            }
+        }, { passive: false });
     });
+
     const closeModal = () => {
         modal.classList.remove('active');
     };
-
 
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
@@ -197,41 +211,43 @@ function initModal3DEffect(modal) {
     const MAX_ROTATION = 10;
     let animationFrameId = null;
 
-    const handleMouseMove = (e) => {
-        if (animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-        }
-
+    const applyTilt = (clientX, clientY) => {
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
         animationFrameId = requestAnimationFrame(() => {
             const rect = immagine.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-
-            const mouseX = e.clientX - centerX;
-            const mouseY = e.clientY - centerY;
-
-            const rotateY = (mouseX / (rect.width / 2)) * MAX_ROTATION;
+            const mouseX = clientX - (rect.left + rect.width  / 2);
+            const mouseY = clientY - (rect.top  + rect.height / 2);
+            const rotateY =  (mouseX / (rect.width  / 2)) * MAX_ROTATION;
             const rotateX = -(mouseY / (rect.height / 2)) * MAX_ROTATION;
-
             contenuto.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         });
     };
 
-    immagine.addEventListener('mousemove', handleMouseMove);
-    immagine._mouseMoveHandler = handleMouseMove;
+    const resetTilt = () => {
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        contenuto.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    };
 
-    immagine.addEventListener('mouseleave', () => {
-        contenuto.style.transform = 'rotateX(0deg) rotateY(0deg)';
-        if (animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-        }
-    });
-    modal = document.getElementById('modal-carta-ingrandita');
-    if (modal && modal._mouseMoveHandler) {
-        modal.removeEventListener('mousemove', modal._mouseMoveHandler);
-        const contenuto = modal.querySelector('.modal-carta-contenuto');
-        contenuto.style.transform = 'rotateX(0deg) rotateY(0deg)';
-    }
+    // ── Mouse (desktop) ────────────────────────────────────────────
+    const handleMouseMove = (e) => applyTilt(e.clientX, e.clientY);
+    immagine.addEventListener('mousemove', handleMouseMove);
+    immagine.addEventListener('mouseleave', resetTilt);
+
+    // ── Touch (mobile) ─────────────────────────────────────────────
+    const handleTouchMove = (e) => {
+        // Prevent page scroll while tilting
+        e.preventDefault();
+        const t = e.touches[0];
+        applyTilt(t.clientX, t.clientY);
+    };
+    // Use the whole modal surface so the finger doesn't have to stay on the tiny image
+    modal.addEventListener('touchmove', handleTouchMove, { passive: false });
+    modal.addEventListener('touchend',  resetTilt);
+    modal.addEventListener('touchcancel', resetTilt);
+
+    // Store refs so they can be cleaned up when the modal is closed
+    immagine._mouseMoveHandler = handleMouseMove;
+    modal._touchMoveHandler    = handleTouchMove;
 }
 
 document.addEventListener('DOMContentLoaded', initCartaCard);

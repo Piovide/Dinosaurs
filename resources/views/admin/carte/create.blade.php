@@ -28,7 +28,7 @@
                 </div>
 
                 <div class="row g-3 mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label fw-semibold">Numero</label>
                         <input type="number" name="numero" min="1"
                                class="form-control @error('numero') is-invalid @enderror"
@@ -40,8 +40,16 @@
                         <input type="text" name="prefisso" maxlength="20"
                                class="form-control @error('prefisso') is-invalid @enderror"
                                value="{{ old('prefisso') }}"
-                               placeholder="es. SD, SP">
+                               placeholder="es. M, P">
                         @error('prefisso')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+                    <div class="col-md-1">
+                        <label class="form-label fw-semibold">Suffisso</label>
+                        <input type="text" name="suffisso" maxlength="20"
+                               class="form-control @error('suffisso') is-invalid @enderror"
+                               value="{{ old('suffisso') }}"
+                               placeholder="a, b">
+                        @error('suffisso')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     @include('admin.carte._artista_field', ['selectedArtistaId' => null])
                 </div>

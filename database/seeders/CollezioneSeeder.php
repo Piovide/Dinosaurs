@@ -9,11 +9,11 @@ class CollezioneSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('collezione')->insertOrIgnore([
-            'nome' => 'Dinosaurs',
-            'descrizione' => 'Set di carte sui dinosauri',
-            'numero_carte' => 200,
-            'data_uscita' => now(),
+        DB::table('collezione')->insert([
+            'nome' => 'Cuphead Out Of The Cards',
+            'descrizione' => 'Collezione di carte ispirata al videogioco Cuphead',
+            'numero_carte' => 160,
+            'data_uscita' => '2024-01-01',
         ]);
     }
 }

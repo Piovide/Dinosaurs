@@ -45,7 +45,7 @@
                                 @endif
                             </td>
                             <td class="fw-semibold">{{ $carta->titolo }}</td>
-                            <td>{{ $carta->artista?->cognome }} {{ $carta->artista?->nome }}</td>
+                            <td>{{ $carta->artista?->nominativo }}</td>
                             <td>
                                 @forelse($carta->raritas as $r)
                                     <span class="badge bg-warning text-dark d-inline-flex align-items-center gap-1">

@@ -26,6 +26,35 @@ body {
     width: 100%;
 }
 
+/* Carta image - clickable on both desktop and mobile */
+.carta-image {
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    user-select: none;
+    /* Enable touch feedback */
+    -webkit-touch-callout: none;
+    /* Visual feedback on hover/focus */
+}
+
+/* Desktop hover effect */
+@media (hover: hover) {
+    .carta-image:hover {
+        transform: scale(1.03);
+        filter: brightness(1.05);
+    }
+}
+
+/* Mobile active state and touch feedback */
+.carta-image:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+/* Ensure touch scrolling is smooth while still allowing tap */
+.carta-image {
+    touch-action: auto;
+}
+
 /* Modal per l'immagine ingrandita */
 .modal-carta-ingrandita {
     display: none;
@@ -56,6 +85,7 @@ body {
     animation: slideUp 0.3s ease-out;
     transform-style: preserve-3d;
     transition: transform 0.05s linear;
+    touch-action: none; /* allow JS to handle touch without browser interference */
 }
 
 @media (width < 600px) {
@@ -140,28 +170,60 @@ body {
 #main-navbar {
     background-color: var(--primary-color);
 }
-#nav-bar-home {
-    padding: 1rem;
-    & a.nav-link {
-        font-size: large;
-        padding: .5rem 1rem;
-        border-radius: 2rem;
-        border: 1px solid var(--accent-color);
-        width: 8rem;
-        text-align: center;
-        background-color: white;
-        transition: background-color 0.3s ease, color 0.3s ease;
-        &:hover {
-            background-color: var(--accent-color);
-            color: white;
-        }
-    }
 
-    & li:hover a.active:not(:hover) {
-        background-color: white;
-        color: var(--accent-color);
-    }
+/*
+ * Tailwind v4 generates `.collapse { visibility: collapse }` as a utility
+ * because it scans Blade templates and sees the Bootstrap class name.
+ * This overrides that with higher specificity so Bootstrap's component works.
+ */
+#mainNavCollapse,
+.navbar-collapse {
+    visibility: visible !important;
+}
 
+/* Nav-link pill style (desktop: links inside the collapse) */
+#mainNavCollapse .navbar-nav .nav-link {
+    font-size: 1rem;
+    padding: .4rem .9rem;
+    border-radius: 2rem;
+    border: 1px solid var(--accent-color);
+    background-color: white;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    white-space: nowrap;
+}
+
+/* Right-side profile/ko-fi buttons: no pill border */
+#mainNavCollapse .navbar-nav:last-child .nav-link {
+    border: none;
+    background: transparent;
+    border-radius: 0;
+    padding: .4rem .5rem;
+}
+
+/* Mobile: stack nicely with some breathing room */
+@media (max-width: 991.98px) {
+    #mainNavCollapse {
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+    }
+    #mainNavCollapse .navbar-nav .nav-link {
+        width: 100%;
+        text-align: left;
+    }
+}
+
+/* ── Card component mobile tweaks ─────────────────────────────────── */
+@media (max-width: 575.98px) {
+    .card .card-body .card-title {
+        font-size: .95rem;
+    }
+    .card .card-body .card-text {
+        font-size: .8rem;
+    }
+    .card .card-body .badge {
+        font-size: .65rem;
+    }
 }
 
 /* ── Rarity radio buttons (carta-card) ────────────────────────────── */

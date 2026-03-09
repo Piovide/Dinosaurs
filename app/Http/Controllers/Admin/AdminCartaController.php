@@ -17,7 +17,7 @@ class AdminCartaController extends Controller
     public function edit($id)
     {
         $carta        = Carta::with(['artista', 'raritas', 'versioni', 'tipologie', 'collezione'])->findOrFail($id);
-        $artisti      = Artista::orderBy('cognome')->get();
+        $artisti      = Artista::orderBy('nominativo')->get();
         $collezioneId = $carta->col_id_collezione;
         $rarita       = CollezioneRarita::where('col_id_collezione', $collezioneId)->orderBy('nome')->get();
         $tipologie    = CollezioneTipologia::where('col_id_collezione', $collezioneId)->orderBy('nome')->get();
@@ -36,17 +36,23 @@ class AdminCartaController extends Controller
             'art_id_artista'           => 'nullable|exists:artista,id_artista',
             'numero'                   => 'nullable|integer|min:1',
             'prefisso'                 => 'nullable|string|max:20',
+            'suffisso'                 => 'nullable|string|max:20',
             'rar_id_collezione_rarita' => 'nullable|exists:collezione_rarita,id_collezione_rarita',
             'tipologia_ids'            => 'nullable|array',
             'tipologia_ids.*'          => 'exists:collezione_tipologia,id_collezione_tipologia',
             'versione_ids'             => 'nullable|array',
             'versione_ids.*'           => 'exists:versione_collezione,id_versione',
-            'immagine'                 => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
+            'immagine'                 => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10000',
+        ], [
+            'immagine.max' => 'Il file immagine non deve superare 10MB.',
+            'immagine.image' => 'Il file deve essere un\'immagine valida.',
+            'immagine.mimes' => 'Il file deve essere in formato: JPEG, PNG, JPG, GIF o WebP.',
         ]);
 
         $carta = Carta::with('collezione')->findOrFail($id);
         $data  = $request->only('titolo', 'descrizione', 'col_id_collezione', 'art_id_artista', 'numero');
         $data['prefisso'] = $request->prefisso ?: null;
+        $data['suffisso'] = $request->suffisso ?: null;
 
         if ($request->hasFile('immagine')) {
             $imageService->delete($carta->immagine_url);

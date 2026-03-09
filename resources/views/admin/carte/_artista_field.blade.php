@@ -11,7 +11,7 @@
             @foreach($artisti as $artista)
                 <option value="{{ $artista->id_artista }}"
                     {{ old('art_id_artista', $selectedArtistaId ?? '') == $artista->id_artista ? 'selected' : '' }}>
-                    {{ $artista->cognome }} {{ $artista->nome }}
+                    {{ $artista->nominativo }}
                 </option>
             @endforeach
         </select>
@@ -28,15 +28,11 @@
     <div class="card border-success border-opacity-50 bg-success bg-opacity-10 p-3 mt-1">
         <h6 class="mb-3 text-success fw-semibold">&#43; Nuovo Artista</h6>
         <div class="row g-2">
-            <div class="col-md-4">
-                <label class="form-label small fw-semibold">Nome <span class="text-danger">*</span></label>
-                <input type="text" id="new_artista_nome" class="form-control form-control-sm" placeholder="Nome">
+            <div class="col-md-6">
+                <label class="form-label small fw-semibold">Nominativo <span class="text-danger">*</span></label>
+                <input type="text" id="new_artista_nominativo" class="form-control form-control-sm" placeholder="Nome completo artista">
             </div>
-            <div class="col-md-4">
-                <label class="form-label small fw-semibold">Cognome <span class="text-danger">*</span></label>
-                <input type="text" id="new_artista_cognome" class="form-control form-control-sm" placeholder="Cognome">
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <label class="form-label small fw-semibold">Data di nascita</label>
                 <input type="date" id="new_artista_data" class="form-control form-control-sm">
             </div>
@@ -68,15 +64,14 @@ function toggleNewArtistaForm() {
 }
 
 function saveNewArtista() {
-    const nome    = document.getElementById('new_artista_nome').value.trim();
-    const cognome = document.getElementById('new_artista_cognome').value.trim();
-    const data    = document.getElementById('new_artista_data').value;
-    const sito    = document.getElementById('new_artista_sito').value.trim();
-    const social  = document.getElementById('new_artista_social').value.trim();
-    const fb      = document.getElementById('new-artista-feedback');
+    const nominativo = document.getElementById('new_artista_nominativo').value.trim();
+    const data       = document.getElementById('new_artista_data').value;
+    const sito       = document.getElementById('new_artista_sito').value.trim();
+    const social     = document.getElementById('new_artista_social').value.trim();
+    const fb         = document.getElementById('new-artista-feedback');
 
-    if (!nome || !cognome) {
-        fb.textContent = 'Nome e Cognome sono obbligatori.';
+    if (!nominativo) {
+        fb.textContent = 'Il nominativo è obbligatorio.';
         fb.className = 'small text-danger';
         return;
     }
@@ -91,7 +86,7 @@ function saveNewArtista() {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
             'Accept': 'application/json',
         },
-        body: JSON.stringify({ nome, cognome, data_nascita: data || null, link_sito: sito || null, link_social: social || null }),
+        body: JSON.stringify({ nominativo, data_nascita: data || null, link_sito: sito || null, link_social: social || null }),
     })
     .then(r => r.json())
     .then(data => {
@@ -103,7 +98,7 @@ function saveNewArtista() {
             fb.textContent = '✓ Artista creato e selezionato.';
             fb.className = 'small text-success';
             // Reset fields
-            ['new_artista_nome','new_artista_cognome','new_artista_data','new_artista_sito','new_artista_social']
+            ['new_artista_nominativo','new_artista_data','new_artista_sito','new_artista_social']
                 .forEach(id => document.getElementById(id).value = '');
             setTimeout(() => { document.getElementById('new-artista-form').style.display = 'none'; fb.textContent = ''; }, 1500);
         } else {

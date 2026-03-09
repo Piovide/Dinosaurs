@@ -9,71 +9,235 @@ class CartaSeeder extends Seeder
 {
     public function run(): void
     {
-        $colId = DB::table('collezione')->value('id_collezione');
-
-        // Seed rarità for this collection
-        $raritaData = [
-            ['col_id_collezione' => $colId, 'nome' => 'Comune'],
-            ['col_id_collezione' => $colId, 'nome' => 'Rara'],
-            ['col_id_collezione' => $colId, 'nome' => 'Ultra Rara'],
+        $cardsData = [
+            ["col_id_collezione" => 1, "numero" => "001", "titolo" => "Cuphead"],
+            ["col_id_collezione" => 1, "numero" => "002", "titolo" => "Mugman"],
+            ["col_id_collezione" => 1, "numero" => "003", "titolo" => "Ms. Chalice"],
+            ["col_id_collezione" => 1, "numero" => "004", "titolo" => "Sal Spudder"],
+            ["col_id_collezione" => 1, "numero" => "005", "titolo" => "Ollie Bulb"],
+            ["col_id_collezione" => 1, "numero" => "006", "titolo" => "Chauncey Chantenay"],
+            ["col_id_collezione" => 1, "numero" => "007", "titolo" => "Goopy Le Grande I"],
+            ["col_id_collezione" => 1, "numero" => "008", "titolo" => "Goopy Le Grande II"],
+            ["col_id_collezione" => 1, "numero" => "009", "titolo" => "Goopy Le Grande III"],
+            ["col_id_collezione" => 1, "numero" => "010", "titolo" => "Hilda Berg I"],
+            ["col_id_collezione" => 1, "numero" => "011", "titolo" => "Taurus"],
+            ["col_id_collezione" => 1, "numero" => "012", "titolo" => "Gemini"],
+            ["col_id_collezione" => 1, "numero" => "013", "titolo" => "Sagittarius"],
+            ["col_id_collezione" => 1, "numero" => "014", "titolo" => "Hilda Berg II"],
+            ["col_id_collezione" => 1, "numero" => "015", "titolo" => "Cagney Carnation I"],
+            ["col_id_collezione" => 1, "numero" => "016", "titolo" => "Cagney Carnation II"],
+            ["col_id_collezione" => 1, "numero" => "017", "titolo" => "Ribby and Croaks I"],
+            ["col_id_collezione" => 1, "numero" => "018", "titolo" => "Ribby and Croaks II"],
+            ["col_id_collezione" => 1, "numero" => "019", "titolo" => "Ribby and Croaks III"],
+            ["col_id_collezione" => 1, "numero" => "020", "titolo" => "Baroness Von Bon Bon"],
+            ["col_id_collezione" => 1, "numero" => "021", "titolo" => "Jawbreaker"],
+            ["col_id_collezione" => 1, "numero" => "022", "titolo" => "Candy Corn"],
+            ["col_id_collezione" => 1, "numero" => "023", "titolo" => "Cupcake"],
+            ["col_id_collezione" => 1, "numero" => "024", "titolo" => "Gumball Machine"],
+            ["col_id_collezione" => 1, "numero" => "025", "titolo" => "Waffle"],
+            ["col_id_collezione" => 1, "numero" => "026", "titolo" => "Beppi The Clown I"],
+            ["col_id_collezione" => 1, "numero" => "027", "titolo" => "Beppi The Clown II"],
+            ["col_id_collezione" => 1, "numero" => "028", "titolo" => "Beppi The Clown III"],
+            ["col_id_collezione" => 1, "numero" => "029", "titolo" => "Beppi The Clown IV"],
+            ["col_id_collezione" => 1, "numero" => "030", "titolo" => "Djimmi The Great I"],
+            ["col_id_collezione" => 1, "numero" => "031", "titolo" => "Djimmi The Great II"],
+            ["col_id_collezione" => 1, "numero" => "032", "titolo" => "Djimmi The Great III"],
+            ["col_id_collezione" => 1, "numero" => "033", "titolo" => "Cuppet"],
+            ["col_id_collezione" => 1, "numero" => "034", "titolo" => "Djimmi The Great IV"],
+            ["col_id_collezione" => 1, "numero" => "035", "titolo" => "Grim Matchstick I"],
+            ["col_id_collezione" => 1, "numero" => "036", "titolo" => "Grim Matchstick II"],
+            ["col_id_collezione" => 1, "numero" => "037", "titolo" => "Grim Matchstick III"],
+            ["col_id_collezione" => 1, "numero" => "038", "titolo" => "Wally Warbles I"],
+            ["col_id_collezione" => 1, "numero" => "039", "titolo" => "Willy Warbles "],
+            ["col_id_collezione" => 1, "numero" => "040", "titolo" => "Wally Warbles II"],
+            ["col_id_collezione" => 1, "numero" => "041", "titolo" => "Security Bee"],
+            ["col_id_collezione" => 1, "numero" => "042", "titolo" => "Rumor Honeybottoms I"],
+            ["col_id_collezione" => 1, "numero" => "043", "titolo" => "Rumor Honeybottoms II"],
+            ["col_id_collezione" => 1, "numero" => "044", "titolo" => "Captain Brineybeard I"],
+            ["col_id_collezione" => 1, "numero" => "045", "titolo" => "Shark, Squid, and Dogfish"],
+            ["col_id_collezione" => 1, "numero" => "046", "titolo" => "Captain Brineybeard II"],
+            ["col_id_collezione" => 1, "numero" => "047", "titolo" => "Sally Stageplay I"],
+            ["col_id_collezione" => 1, "numero" => "048", "titolo" => "Sally Stageplay II"],
+            ["col_id_collezione" => 1, "numero" => "049", "titolo" => "Sally Stageplay III"],
+            ["col_id_collezione" => 1, "numero" => "050", "titolo" => "Sally Stageplay IV"],
+            ["col_id_collezione" => 1, "numero" => "051", "titolo" => "Werner Werman I"],
+            ["col_id_collezione" => 1, "numero" => "052", "titolo" => "Werner Werman II"],
+            ["col_id_collezione" => 1, "numero" => "053", "titolo" => "Katzenwagen"],
+            ["col_id_collezione" => 1, "numero" => "054", "titolo" => "Dr. Kahl's Robot I"],
+            ["col_id_collezione" => 1, "numero" => "055", "titolo" => "Dr. Kahl's Robot II"],
+            ["col_id_collezione" => 1, "numero" => "056", "titolo" => "Dr. Kahl"],
+            ["col_id_collezione" => 1, "numero" => "057", "titolo" => "Cala Maria I"],
+            ["col_id_collezione" => 1, "numero" => "058", "titolo" => "Cala Maria II"],
+            ["col_id_collezione" => 1, "numero" => "059", "titolo" => "Cala Maria III"],
+            ["col_id_collezione" => 1, "numero" => "060", "titolo" => "Blind Spectre"],
+            ["col_id_collezione" => 1, "numero" => "061", "titolo" => "The Conductor"],
+            ["col_id_collezione" => 1, "numero" => "062", "titolo" => "Lollipop Ghouls"],
+            ["col_id_collezione" => 1, "numero" => "063", "titolo" => "Phantom Express"],
+            ["col_id_collezione" => 1, "numero" => "064", "titolo" => "King Dice's Right Hand"],
+            ["col_id_collezione" => 1, "numero" => "065", "titolo" => "King Dice"],
+            ["col_id_collezione" => 1, "numero" => "066", "titolo" => "King Dice's Left Hand"],
+            ["col_id_collezione" => 1, "numero" => "067", "titolo" => "Pip and Dot"],
+            ["col_id_collezione" => 1, "numero" => "068", "titolo" => "Hopus Pocus"],
+            ["col_id_collezione" => 1, "numero" => "069", "titolo" => "Mr. Chimes & Mangosteen"],
+            ["col_id_collezione" => 1, "numero" => "070", "titolo" => "Mr. Wheezy & Chips Bettigan"],
+            ["col_id_collezione" => 1, "numero" => "071", "titolo" => "Tipsy Troop"],
+            ["col_id_collezione" => 1, "numero" => "072", "titolo" => "Phear Lap & Pirouletta"],
+            ["col_id_collezione" => 1, "numero" => "073", "titolo" => "The Devil I"],
+            ["col_id_collezione" => 1, "numero" => "074", "titolo" => "The Devil II"],
+            ["col_id_collezione" => 1, "numero" => "075", "titolo" => "The Devil III"],
+            ["col_id_collezione" => 1, "numero" => "076", "titolo" => "The Devil IV"],
+            ["col_id_collezione" => 1, "numero" => "077", "titolo" => "Glumstone The Giant I"],
+            ["col_id_collezione" => 1, "numero" => "078", "titolo" => "Glumstone The Giant II"],
+            ["col_id_collezione" => 1, "numero" => "079", "titolo" => "Glumstone The Giant III"],
+            ["col_id_collezione" => 1, "numero" => "080", "titolo" => "Charlie Left Legs"],
+            ["col_id_collezione" => 1, "numero" => "081", "titolo" => "Madcap Maddie"],
+            ["col_id_collezione" => 1, "numero" => "082", "titolo" => "Sydney The Snout"],
+            ["col_id_collezione" => 1, "numero" => "083", "titolo" => "Brigadier Boneguard"],
+            ["col_id_collezione" => 1, "numero" => "084", "titolo" => "The Yankee Yippers"],
+            ["col_id_collezione" => 1, "numero" => "085", "titolo" => "Sergeant O'Fera"],
+            ["col_id_collezione" => 1, "numero" => "086", "titolo" => "Mortimer Freeze I"],
+            ["col_id_collezione" => 1, "numero" => "087", "titolo" => "Jupiter"],
+            ["col_id_collezione" => 1, "numero" => "088", "titolo" => "Mortimer Freeze II"],
+            ["col_id_collezione" => 1, "numero" => "089", "titolo" => "Esther Winchester I"],
+            ["col_id_collezione" => 1, "numero" => "090", "titolo" => "Esther Winchester II"],
+            ["col_id_collezione" => 1, "numero" => "091", "titolo" => "Esther Winchester III"],
+            ["col_id_collezione" => 1, "numero" => "092", "titolo" => "Esther Winchester IV"],
+            ["col_id_collezione" => 1, "numero" => "093", "titolo" => "Pawns"],
+            ["col_id_collezione" => 1, "numero" => "094", "titolo" => "Knight"],
+            ["col_id_collezione" => 1, "numero" => "095", "titolo" => "Bishop"],
+            ["col_id_collezione" => 1, "numero" => "096", "titolo" => "Rook"],
+            ["col_id_collezione" => 1, "numero" => "097", "titolo" => "Queen"],
+            ["col_id_collezione" => 1, "numero" => "098", "titolo" => "Devil and Angel"],
+            ["col_id_collezione" => 1, "numero" => "099", "titolo" => "Chef Saltbaker I"],
+            ["col_id_collezione" => 1, "numero" => "100", "titolo" => "Chef Saltbaker II"],
+            ["col_id_collezione" => 1, "numero" => "101", "titolo" => "Chef Saltbaker III"],
+            ["col_id_collezione" => 1, "numero" => "102", "titolo" => "Chef Saltbaker IV"],
+            ["col_id_collezione" => 1, "numero" => "103", "titolo" => "Forest Follies"],
+            ["col_id_collezione" => 1, "numero" => "104", "titolo" => "Acorn Maker"],
+            ["col_id_collezione" => 1, "numero" => "105", "titolo" => "Treetop Trouble"],
+            ["col_id_collezione" => 1, "numero" => "106", "titolo" => "Dragonfly"],
+            ["col_id_collezione" => 1, "numero" => "107", "titolo" => "Funhouse Frazzle"],
+            ["col_id_collezione" => 1, "numero" => "108", "titolo" => "The Wall"],
+            ["col_id_collezione" => 1, "numero" => "109", "titolo" => "Funfair Fever"],
+            ["col_id_collezione" => 1, "numero" => "110", "titolo" => "Hot Dog"],
+            ["col_id_collezione" => 1, "numero" => "111", "titolo" => "Perilous Piers"],
+            ["col_id_collezione" => 1, "numero" => "112", "titolo" => "Octopus"],
+            ["col_id_collezione" => 1, "numero" => "113", "titolo" => "Rugged Ridge"],
+            ["col_id_collezione" => 1, "numero" => "114", "titolo" => "Cyclops"],
+            ["col_id_collezione" => 1, "numero" => "115", "titolo" => "Mega Blast"],
+            ["col_id_collezione" => 1, "numero" => "116", "titolo" => "Eight Way"],
+            ["col_id_collezione" => 1, "numero" => "117", "titolo" => "Chaos Orbit"],
+            ["col_id_collezione" => 1, "numero" => "118", "titolo" => "Kablooey"],
+            ["col_id_collezione" => 1, "numero" => "119", "titolo" => "Radial Barrage"],
+            ["col_id_collezione" => 1, "numero" => "120", "titolo" => "Jumbo Rebound"],
+            ["col_id_collezione" => 1, "numero" => "121", "titolo" => "P. Turret"],
+            ["col_id_collezione" => 1, "numero" => "122", "titolo" => "Electro-Bolt"],
+            ["col_id_collezione" => 1, "numero" => "123", "titolo" => "Cyclone Spiral"],
+            ["col_id_collezione" => 1, "numero" => "124", "titolo" => "Heart Charm"],
+            ["col_id_collezione" => 1, "numero" => "125", "titolo" => "Twin Heart Charm"],
+            ["col_id_collezione" => 1, "numero" => "126", "titolo" => "Heart Ring"],
+            ["col_id_collezione" => 1, "numero" => "127", "titolo" => "Smoke Bomb"],
+            ["col_id_collezione" => 1, "numero" => "128", "titolo" => "P. Sugar"],
+            ["col_id_collezione" => 1, "numero" => "129", "titolo" => "Coffee"],
+            ["col_id_collezione" => 1, "numero" => "130", "titolo" => "Whetstone"],
+            ["col_id_collezione" => 1, "numero" => "131", "titolo" => "Astral Cookie"],
+            ["col_id_collezione" => 1, "numero" => "132", "titolo" => "Cursed Relic"],
+            ["col_id_collezione" => 1, "numero" => "133", "titolo" => "Energy Beam & Spiral Pillar"],
+            ["col_id_collezione" => 1, "numero" => "134", "titolo" => "Invincibility"],
+            ["col_id_collezione" => 1, "numero" => "135", "titolo" => "Shield Pal"],
+            ["col_id_collezione" => 1, "numero" => "136", "titolo" => "Giant Ghost"],
+            ["col_id_collezione" => 1, "numero" => "137", "titolo" => "Ghostly Barrage"],
+            ["col_id_collezione" => 1, "numero" => "138", "titolo" => "Elder Kettle"],
+            ["col_id_collezione" => 1, "numero" => "139", "titolo" => "Porkrind"],
+            ["col_id_collezione" => 1, "numero" => "140", "titolo" => "Mac"],
+            ["col_id_collezione" => 1, "numero" => "141", "titolo" => "Quint"],
+            ["col_id_collezione" => 1, "numero" => "142", "titolo" => "Angel"],
+            ["col_id_collezione" => 1, "numero" => "143", "titolo" => "The Boatman"],
+            ["col_id_collezione" => 1, "numero" => "144", "titolo" => "Canteen Hughes"],
+            ["col_id_collezione" => 1, "numero" => "145", "titolo" => "Chip"],
+            ["col_id_collezione" => 1, "numero" => "146", "titolo" => "Four Mel Arrangement"],
+            ["col_id_collezione" => 1, "numero" => "147", "titolo" => "Quadratus"],
+            ["col_id_collezione" => 1, "numero" => "148", "titolo" => "Ginger"],
+            ["col_id_collezione" => 1, "numero" => "149", "titolo" => "Lucien"],
+            ["col_id_collezione" => 1, "numero" => "150", "titolo" => "Buster"],
+            ["col_id_collezione" => 1, "numero" => "151", "titolo" => "Cora"],
+            ["col_id_collezione" => 1, "numero" => "152", "titolo" => "Tully"],
+            ["col_id_collezione" => 1, "numero" => "153", "titolo" => "Silverworth"],
+            ["col_id_collezione" => 1, "numero" => "154", "titolo" => "Ludwig"],
+            ["col_id_collezione" => 1, "numero" => "155", "titolo" => "Wolfgang"],
+            ["col_id_collezione" => 1, "numero" => "156", "titolo" => "King of Games"],
+            ["col_id_collezione" => 1, "numero" => "157", "titolo" => "Buckley"],
+            ["col_id_collezione" => 1, "numero" => "158", "titolo" => "Digby, Lumin, and Prynne"],
+            ["col_id_collezione" => 1, "numero" => "159", "titolo" => "Inspector Graves"],
+            ["col_id_collezione" => 1, "numero" => "160", "titolo" => "Senita"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "1", "suffisso" => "a", "titolo" => "Horace Radish"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "1", "suffisso" => "b", "titolo" => "Horace Radish"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "2", "suffisso" => "a", "titolo" => "Mini Cuppet"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "2", "suffisso" => "b", "titolo" => "Mini Cuppet"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "3", "suffisso" => "a", "titolo" => "Sally Stageplay"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "3", "suffisso" => "b", "titolo" => "Sally Stageplay"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "4", "suffisso" => "a", "titolo" => "Mr. Stageplay - Ascended"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "4", "suffisso" => "b", "titolo" => "Mr. Stageplay - Ascended"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "5", "suffisso" => "a", "titolo" => "The Devil - Dragon"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "5", "suffisso" => "b", "titolo" => "The Devil - Dragon"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "6", "suffisso" => "a", "titolo" => "The Devil - Spider"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "6", "suffisso" => "b", "titolo" => "The Devil - Spider"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "7", "suffisso" => "a", "titolo" => "The Devil - Goat"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "7", "suffisso" => "b", "titolo" => "The Devil - Goat"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "8", "suffisso" => "a", "titolo" => "The Howling Aces"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "8", "suffisso" => "b", "titolo" => "The Howling Aces"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "9", "suffisso" => "a", "titolo" => "Ms. Malice - Bad Ending"],
+            ["col_id_collezione" => 1, "prefisso" => "C", "numero" => "9", "suffisso" => "b", "titolo" => "Ms. Malice - Bad Ending"],
+            ["col_id_collezione" => 1, "prefisso" => "M", "numero" => "1", "titolo" => "Cuphead"],
+            ["col_id_collezione" => 1, "prefisso" => "M", "numero" => "2", "titolo" => "Mugman"],
+            ["col_id_collezione" => 1, "prefisso" => "M", "numero" => "3", "titolo" => "Ms. Chalice"],
+            ["col_id_collezione" => 1, "prefisso" => "M", "numero" => "4", "titolo" => "Elder Kettle"],
+            ["col_id_collezione" => 1, "prefisso" => "M", "numero" => "5", "titolo" => "Djimmi The Great"],
+            ["col_id_collezione" => 1, "prefisso" => "M", "numero" => "6", "titolo" => "Mr. Wheezy"],
+            ["col_id_collezione" => 1, "prefisso" => "M", "numero" => "7", "titolo" => "King Dice"],
+            ["col_id_collezione" => 1, "prefisso" => "M", "numero" => "8", "titolo" => "The Devil"],
+            ["col_id_collezione" => 1, "prefisso" => "M", "numero" => "9", "titolo" => "Glumstone's Ulcer"],
+            ["col_id_collezione" => 1, "prefisso" => "P", "numero" => "1", "titolo" => "Cuphead"],
+            ["col_id_collezione" => 1, "prefisso" => "P", "numero" => "2", "titolo" => "Mugman"],
+            ["col_id_collezione" => 1, "prefisso" => "P", "numero" => "3", "titolo" => "Ms. Chalice"],
+            ["col_id_collezione" => 1, "prefisso" => "P", "numero" => "4", "titolo" => "Elder Kettle"],
+            ["col_id_collezione" => 1, "prefisso" => "P", "numero" => "5", "titolo" => "Porkrind"],
+            ["col_id_collezione" => 1, "prefisso" => "P", "numero" => "6", "titolo" => "King Dice"],
+            ["col_id_collezione" => 1, "prefisso" => "P", "numero" => "7", "titolo" => "The Devil"],
+            ["col_id_collezione" => 1, "prefisso" => "P", "numero" => "8", "titolo" => "Sally Stageplay"],
+            ["col_id_collezione" => 1, "prefisso" => "P", "numero" => "9", "titolo" => "Chef Saltbaker"],
+            ["col_id_collezione" => 1, "numero" => "00", "suffisso" => "a", "titolo" => "Evil Cuphead"],
+            ["col_id_collezione" => 1, "numero" => "00", "suffisso" => "b", "titolo" => "Vile Mugman"],
+            ["col_id_collezione" => 1, "numero" => "00", "suffisso" => "c", "titolo" => "Ms. Malice"],
+            ["col_id_collezione" => 1, "prefisso" => "MRB", "numero" => "1", "titolo" => "Fiche Card"],
+            ["col_id_collezione" => 1, "prefisso" => "MRB", "numero" => "2", "titolo" => "Ceramic Card"],
         ];
-        foreach ($raritaData as $r) {
-            DB::table('collezione_rarita')->insertOrIgnore($r);
+
+        // Process cards to properly format them for database
+        $cards = [];
+        foreach ($cardsData as $card) {
+            $processedCard = [
+                'col_id_collezione' => $card['col_id_collezione'],
+                'titolo' => $card['titolo'],
+                'prefisso' => $card['prefisso'] ?? null,
+                'suffisso' => $card['suffisso'] ?? null,
+            ];
+
+            // Convert numero to integer if it's numeric
+            if (isset($card['numero'])) {
+                $numero = $card['numero'];
+                if (is_numeric($numero)) {
+                    $processedCard['numero'] = (int)$numero;
+                } else {
+                    $processedCard['numero'] = $numero;
+                }
+            } else {
+                $processedCard['numero'] = null;
+            }
+
+            $cards[] = $processedCard;
         }
 
-        // Seed tipologie for this collection
-        $tipologiaData = [
-            ['col_id_collezione' => $colId, 'nome' => 'Saurischi'],
-            ['col_id_collezione' => $colId, 'nome' => 'Pterosauri'],
-            ['col_id_collezione' => $colId, 'nome' => 'Ornitischi'],
-        ];
-        foreach ($tipologiaData as $t) {
-            DB::table('collezione_tipologia')->insertOrIgnore($t);
-        }
-
-        // Resolve IDs by name
-        $rarRara     = DB::table('collezione_rarita')->where('col_id_collezione', $colId)->where('nome', 'Rara')->value('id_collezione_rarita');
-        $tipSaur     = DB::table('collezione_tipologia')->where('col_id_collezione', $colId)->where('nome', 'Saurischi')->value('id_collezione_tipologia');
-
-        DB::table('carta')->insertOrIgnore([
-            [
-                'col_id_collezione' => $colId,
-                'titolo'            => 'T-Rex',
-                'descrizione'       => 'Il re dei dinosauri.',
-                'art_id_artista'    => 1,
-                'numero'            => 1,
-                'immagine_url'      => 'dinosaurs/TEST_1.png',
-            ],
-            [
-                'col_id_collezione' => $colId,
-                'titolo'            => 'Triceratops',
-                'descrizione'       => 'Dinosauro con tre corna.',
-                'art_id_artista'    => 2,
-                'numero'            => 2,
-                'immagine_url'      => 'dinosaurs/TEST_2.png',
-            ],
-        ]);
-
-        // Seed tipologie + rarità per carta via pivots
-        $trexId        = DB::table('carta')->where('titolo', 'T-Rex')->value('id_carta');
-        $triceratopsId = DB::table('carta')->where('titolo', 'Triceratops')->value('id_carta');
-
-        DB::table('carta_tipologia')->insertOrIgnore([
-            ['id_carta' => $trexId,        'id_collezione_tipologia' => $tipSaur, 'created_at' => now(), 'updated_at' => now()],
-            ['id_carta' => $triceratopsId, 'id_collezione_tipologia' => $tipSaur, 'created_at' => now(), 'updated_at' => now()],
-        ]);
-
-        // Seed rarità per carta via pivot rarita_carta
-        $rarUltraRara = DB::table('collezione_rarita')
-            ->where('col_id_collezione', $colId)
-            ->where('nome', 'Ultra Rara')
-            ->value('id_collezione_rarita');
-
-        DB::table('rarita_carta')->insertOrIgnore([
-            // T-Rex: Ultra Rara (una sola rarità per carta)
-            ['id_carta' => $trexId, 'id_collezione_rarita' => $rarUltraRara, 'created_at' => now(), 'updated_at' => now()],
-            // Triceratops: Rara
-            ['id_carta' => $triceratopsId, 'id_collezione_rarita' => $rarRara, 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        DB::table('carta')->insert($cards);
     }
 }

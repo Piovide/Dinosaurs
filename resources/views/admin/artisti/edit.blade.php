@@ -1,7 +1,7 @@
 <x-admin-layout title="Modifica Artista">
     <div class="d-flex align-items-center gap-2 mb-4">
         <a href="{{ route('admin.artisti.index') }}" class="btn btn-sm btn-outline-secondary">&larr; Artisti</a>
-        <h2 class="mb-0">Modifica: {{ $artista->cognome }} {{ $artista->nome }}</h2>
+        <h2 class="mb-0">Modifica: {{ $artista->nominativo }}</h2>
     </div>
 
     <div class="card border-0 shadow-sm" style="max-width: 540px;">
@@ -10,21 +10,12 @@
                 @csrf
                 @method('PUT')
 
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">Nome <span class="text-danger">*</span></label>
-                        <input type="text" name="nome"
-                               class="form-control @error('nome') is-invalid @enderror"
-                               value="{{ old('nome', $artista->nome) }}" required>
-                        @error('nome')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">Cognome <span class="text-danger">*</span></label>
-                        <input type="text" name="cognome"
-                               class="form-control @error('cognome') is-invalid @enderror"
-                               value="{{ old('cognome', $artista->cognome) }}" required>
-                        @error('cognome')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Nominativo <span class="text-danger">*</span></label>
+                    <input type="text" name="nominativo"
+                           class="form-control @error('nominativo') is-invalid @enderror"
+                           value="{{ old('nominativo', $artista->nominativo) }}" required>
+                    @error('nominativo')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="mb-3">

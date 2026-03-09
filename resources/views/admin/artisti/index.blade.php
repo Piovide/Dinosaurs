@@ -20,7 +20,7 @@
                     @forelse($artisti as $artista)
                         <tr>
                             <td class="text-muted small">{{ $artista->id_artista }}</td>
-                            <td class="fw-semibold">{{ $artista->cognome }} {{ $artista->nome }}</td>
+                            <td class="fw-semibold">{{ $artista->nominativo }}</td>
                             <td>{{ $artista->data_nascita ?? '—' }}</td>
                             <td>
                                 @if($artista->link_sito)
@@ -42,7 +42,7 @@
                                 <form method="POST"
                                       action="{{ route('admin.artisti.destroy', $artista->id_artista) }}"
                                       class="d-inline"
-                                      onsubmit="return confirm('Eliminare {{ addslashes($artista->cognome . ' ' . $artista->nome) }}?')">
+                                      onsubmit="return confirm('Eliminare {{ addslashes($artista->nominativo) }}?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger">Elimina</button>

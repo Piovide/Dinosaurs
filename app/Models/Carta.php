@@ -21,6 +21,7 @@ class Carta extends Model
         'art_id_artista',
         'numero',
         'prefisso',
+        'suffisso',
         'immagine_url',
         'immagine_retro_url',
     ];

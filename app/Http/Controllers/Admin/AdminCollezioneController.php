@@ -23,7 +23,7 @@ class AdminCollezioneController extends Controller
     public function show($id)
     {
         $collezione = Collezione::with('carte.artista', 'carte.raritas', 'carte.tipologie')->findOrFail($id);
-        $carte      = $collezione->carte()->with(['artista', 'raritas', 'tipologie'])->paginate(20);
+        $carte      = $collezione->carte()->with(['artista', 'raritas', 'tipologie'])->orderBy('id_carta')->paginate(20);
         $rarita     = $collezione->rarita()->orderBy('nome')->get();
         $tipologie  = $collezione->tipologie()->orderBy('nome')->get();
         $versioni   = $collezione->versioni()->orderBy('nome')->get();
@@ -84,7 +84,7 @@ class AdminCollezioneController extends Controller
     public function createCarta($collezioneId)
     {
         $collezione = Collezione::findOrFail($collezioneId);
-        $artisti    = Artista::orderBy('cognome')->get();
+        $artisti    = Artista::orderBy('nominativo')->get();
         $rarita     = CollezioneRarita::where('col_id_collezione', $collezioneId)->orderBy('nome')->get();
         $tipologie  = CollezioneTipologia::where('col_id_collezione', $collezioneId)->orderBy('nome')->get();
         $versioni   = VersioneCollezione::where('col_id_collezione', $collezioneId)->orderBy('nome')->get();
@@ -101,12 +101,17 @@ class AdminCollezioneController extends Controller
             'art_id_artista'           => 'nullable|exists:artista,id_artista',
             'numero'                   => 'nullable|integer|min:1',
             'prefisso'                 => 'nullable|string|max:20',
+            'suffisso'                 => 'nullable|string|max:20',
             'rar_id_collezione_rarita' => 'nullable|exists:collezione_rarita,id_collezione_rarita',
             'tipologia_ids'            => 'nullable|array',
             'tipologia_ids.*'          => 'exists:collezione_tipologia,id_collezione_tipologia',
             'versione_ids'             => 'nullable|array',
             'versione_ids.*'           => 'exists:versione_collezione,id_versione',
-            'immagine'                 => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
+            'immagine'                 => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10000',
+        ], [
+            'immagine.max' => 'Il file immagine non deve superare 10MB.',
+            'immagine.image' => 'Il file deve essere un\'immagine valida.',
+            'immagine.mimes' => 'Il file deve essere in formato: JPEG, PNG, JPG, GIF o WebP.',
         ]);
 
         $collezione  = Collezione::findOrFail($collezioneId);
@@ -121,6 +126,7 @@ class AdminCollezioneController extends Controller
             'art_id_artista'    => $request->art_id_artista,
             'numero'            => $request->numero,
             'prefisso'          => $request->prefisso ?: null,
+            'suffisso'          => $request->suffisso ?: null,
             'immagine_url'      => $immagineUrl,
         ]);
 

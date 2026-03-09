@@ -1,4 +1,4 @@
-@props(['title' => 'Dinosaurs'])
+@props(['title' => 'Tomodachi tracker'])
 
 <!DOCTYPE html>
 <html lang="it">
@@ -11,28 +11,40 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4" id="main-navbar">
-    <div class="row w-100 d-flex justify-content-between align-items-center mx-5 px-5 py-3">
-        <div class="col-12 col-md-3">
-            <a class="navbar-brand navbar-nav ms-auto gap-3 mb-2 mb-lg-0 d-flex flex-row align-items-center justify-content-center" href="{{ route('home') }}">
-                <img src="{{ asset('img/dario-moccia.png') }}" alt="Logo" class="d-inline-block align-top" style="width: 10rem; mix-blend-mode: multiply;">
-            </a>
-        </div>
-        <div id="nav-bar-home" class="col-12 col-md-6">
-           {{-- nav centrale: collezioni dropdown, artisti, collezione utente --}}
-            @php $navCollezioni = \App\Models\Collezione::orderBy('data_uscita', 'desc')->get(); @endphp
-            <ul class="navbar-nav me-auto mb-2 gap-2 mb-lg-0 d-flex flex-row flex-wrap align-items-center justify-content-center">
-                <li class="nav-item dropdown mx-3">
-                    <a class="nav-link dropdown-toggle" href="{{ route('home') }}" id="homeDropdown"
+    <div class="container-fluid px-3 px-lg-5">
+
+        {{-- Brand / Logo --}}
+        <a class="navbar-brand" href="{{ route('home') }}">
+            <img src="{{ asset('img/dario-moccia.png') }}" alt="Logo"
+                 style="width: 8rem; mix-blend-mode: multiply;">
+        </a>
+
+        {{-- Mobile toggler --}}
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#mainNavCollapse"
+                aria-controls="mainNavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        {{-- Collapsible nav --}}
+        @php $navCollezioni = \App\Models\Collezione::orderBy('data_uscita', 'desc')->get(); @endphp
+        <div class="collapse navbar-collapse" id="mainNavCollapse">
+
+            {{-- Centre links --}}
+            <ul class="navbar-nav mx-auto gap-1 gap-lg-2 my-2 my-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="{{ route('home') }}"
                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Home
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="homeDropdown">
+                    <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{{ route('home') }}">Tutte le carte</a></li>
                         @if($navCollezioni->isNotEmpty())
                             <li><hr class="dropdown-divider"></li>
                             @foreach($navCollezioni as $col)
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('home', ['collezione' => $col->id_collezione]) }}">
+                                    <a class="dropdown-item"
+                                       href="{{ route('home', ['collezione' => $col->id_collezione]) }}">
                                         {{ $col->nome }}
                                     </a>
                                 </li>
@@ -40,29 +52,39 @@
                         @endif
                     </ul>
                 </li>
-                <li class="nav-item mx-3">
-                    <a class="nav-link" @auth href="{{ route('collezione') }}" @else onclick="openLoginModal(); return false;" @endauth>Collezione</a>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       @auth href="{{ route('collezione') }}"
+                       @else onclick="openLoginModal(); return false;" @endauth>
+                        Collezione
+                    </a>
                 </li>
-                <li class="nav-item mx-3">
-                    <a class="nav-link" href="">Artisti (WIP)</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('artisti.index') }}">Artisti</a>
                 </li>
-                <li class="nav-item mx-3">
-                    <a class="nav-link" href="">Crediti (WIP)</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('crediti') }}">Crediti</a>
                 </li>
             </ul>
-        </div>
-        <div class="col-12 col-md-3">
-            <ul class="navbar-nav ms-auto gap-3 mb-2 mb-lg-0 d-flex flex-row align-items-center justify-content-center">
+
+            {{-- Right: profile + ko-fi --}}
+            <ul class="navbar-nav gap-1 align-items-lg-center my-2 my-lg-0">
                 <li class="nav-item dropdown">
-                    <button class="nav-link btn btn-link d-flex align-items-center" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border: none; cursor: pointer;">
+                    <button class="nav-link btn btn-link d-flex align-items-center gap-1"
+                            id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                            style="border: none; cursor: pointer;">
                         <x-icon name="person" size="lg" color="black" />
+                        @auth
+                            <span class="d-lg-none small">{{ Auth::user()->username }}</span>
+                        @endauth
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                    <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="profileDropdown">
                         @auth
                             <li><h6 class="dropdown-header">{{ Auth::user()->username }}</h6></li>
                             @if(Auth::user()->isAdmin())
                                 <li>
-                                    <a class="dropdown-item text-warning fw-semibold" href="{{ route('admin.dashboard') }}">
+                                    <a class="dropdown-item text-warning fw-semibold"
+                                       href="{{ route('admin.dashboard') }}">
                                         &#9998; Admin Panel
                                     </a>
                                 </li>
@@ -71,31 +93,27 @@
                             <li>
                                 <form method="POST" action="{{ route('auth.logout') }}" class="d-inline w-100">
                                     @csrf
-                                    <button type="submit" class="dropdown-item text-danger">
-                                        Logout
-                                    </button>
+                                    <button type="submit" class="dropdown-item text-danger">Logout</button>
                                 </form>
                             </li>
                         @else
                             <li>
-                                <a class="dropdown-item" href="#" onclick="openLoginModal(); return false;">
-                                    Login
-                                </a>
+                                <a class="dropdown-item" href="#" onclick="openLoginModal(); return false;">Login</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="#" onclick="openRegisterModal(); return false;">
-                                    Registrati
-                                </a>
+                                <a class="dropdown-item" href="#" onclick="openRegisterModal(); return false;">Registrati</a>
                             </li>
                         @endauth
                     </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center" href="https://ko-fi.com/Piovide">
-                        <img src="https://storage.ko-fi.com/cdn/logomarkLogo.png" alt="Ko-fi Logo" class="icon icon-lg" style="aspect-ratio: auto;">
+                        <img src="https://storage.ko-fi.com/cdn/logomarkLogo.png" alt="Ko-fi"
+                             class="icon icon-lg" style="aspect-ratio: auto;">
                     </a>
                 </li>
             </ul>
+
         </div>
     </div>
 </nav>

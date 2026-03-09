@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title ?? 'Admin Panel' }} — Dinosaurs</title>
+    <title>{{ $title ?? 'Admin Panel' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body { background-color: #f8f9fa; }
@@ -52,7 +52,7 @@
                 aria-controls="adminOffcanvas">
             &#9776;
         </button>
-        <a href="{{ route('admin.dashboard') }}" class="fw-bold fs-6 fs-sm-5 text-white text-decoration-none">&#9998; Admin — Dinosaurs</a>
+        <a href="{{ route('admin.dashboard') }}" class="fw-bold fs-6 fs-sm-5 text-white text-decoration-none">&#9998; Admin — Tomodachi tracker</a>
     </div>
     <div class="d-flex align-items-center gap-2">
         <a href="{{ route('home') }}" class="btn btn-sm btn-outline-light">&#8592; Sito</a>

@@ -26,7 +26,7 @@ class CartaController extends Controller
             $query->whereHas('tipologie', fn($q) => $q->where('id_collezione_tipologia', $request->tipologia));
         }
 
-        $pagination = $query->paginate(12);
+        $pagination = $query->orderBy('id_carta')->paginate(12);
         $carte      = $pagination->getCollection();
 
         $collezioneSelezionata = $request->filled('collezione')

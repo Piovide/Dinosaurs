@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UtenteSeeder::class,
-            DizionarioSeeder::class,
             ArtistaSeeder::class,
             CollezioneSeeder::class,
             CartaSeeder::class,

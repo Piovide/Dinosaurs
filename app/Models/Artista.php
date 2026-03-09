@@ -11,7 +11,7 @@ class Artista extends Model
 
     protected $table = 'artista';
     protected $primaryKey = 'id_artista';
-    protected $fillable = ['nome', 'cognome', 'data_nascita', 'link_sito', 'link_social'];
+    protected $fillable = ['nominativo', 'data_nascita', 'link_sito', 'link_social'];
 
     public function carte()
     {

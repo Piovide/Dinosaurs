@@ -10,26 +10,25 @@ class AdminArtistaController extends Controller
 {
     public function index()
     {
-        $artisti = Artista::withCount('carte')->orderBy('cognome')->paginate(30);
+        $artisti = Artista::withCount('carte')->orderBy('nominativo')->paginate(30);
         return view('admin.artisti.index', compact('artisti'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'nome'          => 'required|string|max:100',
-            'cognome'       => 'required|string|max:100',
+            'nominativo'    => 'required|string|max:255',
             'data_nascita'  => 'nullable|date',
             'link_sito'     => 'nullable|url|max:255',
             'link_social'   => 'nullable|url|max:255',
         ]);
 
-        $artista = Artista::create($request->only('nome', 'cognome', 'data_nascita', 'link_sito', 'link_social'));
+        $artista = Artista::create($request->only('nominativo', 'data_nascita', 'link_sito', 'link_social'));
 
         if ($request->expectsJson()) {
             return response()->json([
                 'id'     => $artista->id_artista,
-                'label'  => $artista->cognome . ' ' . $artista->nome,
+                'label'  => $artista->nominativo,
             ], 201);
         }
 
@@ -45,15 +44,14 @@ class AdminArtistaController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nome'         => 'required|string|max:100',
-            'cognome'      => 'required|string|max:100',
+            'nominativo'   => 'required|string|max:255',
             'data_nascita' => 'nullable|date',
             'link_sito'    => 'nullable|url|max:255',
             'link_social'  => 'nullable|url|max:255',
         ]);
 
         $artista = Artista::findOrFail($id);
-        $artista->update($request->only('nome', 'cognome', 'data_nascita', 'link_sito', 'link_social'));
+        $artista->update($request->only('nominativo', 'data_nascita', 'link_sito', 'link_social'));
 
         return redirect()->route('admin.artisti.index')
             ->with('success', 'Artista aggiornato con successo.');

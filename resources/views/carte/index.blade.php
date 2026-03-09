@@ -1,5 +1,5 @@
 @props(['username' => null])
-<x-app-layout title="{{ isset($collezione) && $collezione ? $collezione->nome . ' — Dinosaurs' : 'Enciclopedia Carte Dinosaurs' }}">
+<x-app-layout title="{{ isset($collezione) && $collezione ? $collezione->nome : 'Tomodachi tracker' }}">
     @if($username)
         <h1 class="text-center mb-4">Collezione di {{ $username }}</h1>
     @endif
@@ -11,12 +11,12 @@
             <a href="{{ route('home') }}">Vedi tutte le carte</a>
         </p>
     @endif
-    <form method="GET" class="mb-4 mx-auto w-50">
+    <form method="GET" class="mb-4 mx-auto" style="max-width:600px;">
         @if(request('collezione'))
             <input type="hidden" name="collezione" value="{{ request('collezione') }}">
         @endif
         <div class="row g-2">
-            <div class="col-md-3">
+            <div class="col-12 col-sm-5">
                 <select name="rarita" class="form-select">
                     <option value="">Tutte le rarità</option>
                     @foreach($rarita as $r)
@@ -26,7 +26,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-12 col-sm-5">
                 <select name="tipologia" class="form-select">
                     <option value="">Tutte le tipologie</option>
                     @foreach($tipologie as $t)
@@ -36,12 +36,12 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-12 col-sm-2">
                 <button class="btn btn-success w-100">Filtra</button>
             </div>
         </div>
     </form>
-<div class="w-100 mx-auto px-5">
+<div class="w-100 mx-auto px-2 px-md-4 px-lg-5">
 
     <div class="row" id="cards-grid">
         @if($carte->isEmpty())

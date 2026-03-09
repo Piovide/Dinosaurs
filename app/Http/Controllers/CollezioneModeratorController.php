@@ -19,8 +19,8 @@ class CollezioneModeratorController extends Controller
             abort(403, 'Non hai il permesso di modificare questa collezione');
         }
 
-        $carte = $collezione->carte()->with(['artista', 'rarita', 'tipo'])->paginate(20);
-        $tutteLeCarte = Carta::with(['artista', 'rarita', 'tipo'])->get();
+        $carte = $collezione->carte()->with(['artista', 'rarita', 'tipo'])->orderBy('id_carta')->paginate(20);
+        $tutteLeCarte = Carta::with(['artista', 'rarita', 'tipo'])->orderBy('id_carta')->get();
 
         return view('collezione.modifica', compact('collezione', 'carte', 'tutteLeCarte'));
     }

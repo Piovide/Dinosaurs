@@ -24,7 +24,7 @@
     $initialKey    = $firstRaritaId . '__';
     $initialQty    = $combos[$initialKey] ?? 0;
 @endphp
-<div class="col-md-2 mb-4">
+<div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3 mb-md-4">
     <div class="card h-100 shadow-sm p-3 rounded"
          data-carta-id="{{ $carta->id_carta }}"
          data-combos="{{ $combosJson }}">
@@ -35,7 +35,7 @@
                  style="cursor: pointer;">
             <div class="card-info position-absolute bottom-0 start-0 p-2 bg-dark bg-opacity-50 text-white rounded-end rounded-bottom-0">
                 <small class="d-flex align-items-center gap-1 flex-wrap">
-                    {{ $carta->prefisso ? $carta->prefisso . '-' : '' }}{{ $carta->numero }} / {{ $carta->collezione->numero_carte }}
+                    {{ $carta->prefisso ? $carta->prefisso : '' }}{{ $carta->numero }}{{ $carta->suffisso ? $carta->suffisso : '' }} / {{ $carta->collezione->numero_carte }}
                     @if($firstRarita)
                         <x-icona-badge :record="$firstRarita" size="14px" />
                     @endif
@@ -85,7 +85,7 @@
                 </div>
             @endif
 
-            <p class="card-text mb-1 text-center">{{ $carta->artista->nome }} {{ $carta->artista->cognome }}</p>
+            <p class="card-text mb-1 text-center">{{ $carta->artista->nominativo ?? '' }}</p>
 
             {{-- Counter --}}
             @auth

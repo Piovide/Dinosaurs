@@ -24,7 +24,7 @@ class UtenteSeeder extends Seeder
         Utente::createOrFirst(['username' => 'admin'], [
             'username' => 'admin',
             'email' => 'admin@example.com',
-            'password' => Hash::make('admin123'),
+            'password' => Hash::make('4Mf9hmkTMA7bAUW'),
             'preferences' => json_encode([]),
             'ruolo' => 'admin',
         ]);

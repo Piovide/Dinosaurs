@@ -28,23 +28,6 @@ class DizionarioSeeder extends Seeder
                 'stato' => 1,
             ],
 
-            // Tipi
-            [
-                'categoria' => 'tipo',
-                'descrizione' => 'Saurischi',
-                'stato' => 1,
-            ],
-            [
-                'categoria' => 'tipo',
-                'descrizione' => 'Pterosauri',
-                'stato' => 1,
-            ],
-            [
-                'categoria' => 'tipo',
-                'descrizione' => 'Ornitischi',
-                'stato' => 1,
-            ],
-
             // Stato carta
             [
                 'categoria' => 'stato',

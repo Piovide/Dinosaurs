@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartaController;
 use App\Http\Controllers\CollezioneUtenteController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ArtistaController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminCollezioneController;
 use App\Http\Controllers\Admin\AdminCartaController;
@@ -14,6 +15,11 @@ use App\Http\Controllers\Admin\AdminVersioneCollezioneController;
 
 Route::get('/', [CartaController::class, 'index'])->name('home');
 Route::get('/carte/{id}', [CartaController::class, 'show'])->name('carte.show');
+
+Route::get('/artisti', [ArtistaController::class, 'index'])->name('artisti.index');
+Route::get('/artisti/{id}', [ArtistaController::class, 'show'])->name('artisti.show');
+
+Route::view('/crediti', 'crediti')->name('crediti');
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('auth.login');
