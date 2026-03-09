@@ -7,7 +7,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="Gestisci e traccia la tua collezione di carte Tomodachi press.">
+    <meta name="keywords" content="tomodachi tracker, collezione carte, card tracker, tracker tomodachi press, tracker, lista carte tomodachi press">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Tomodachi Tracker">
+    <meta property="og:description" content="Traccia la tua collezione di carte Tomodachi">
+    <meta property="og:image" content="https://www.tomodachi-tracker.it/preview.png">
+    <meta property="og:url" content="https://www.tomodachi-tracker.it">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://www.tomodachi-tracker.it">
     <title>{{ $title }}</title>
+    <script type="application/ld+json">
+        {
+         "@context": "https://schema.org",
+         "@type": "WebSite",
+         "name": "Tomodachi Tracker",
+         "url": "https://www.tomodachi-tracker.it",
+         "description": "Gestisci e traccia la tua collezione di carte Tomodachi."
+        }
+    </script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4" id="main-navbar">
