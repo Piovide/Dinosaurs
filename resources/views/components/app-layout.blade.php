@@ -48,7 +48,7 @@
     <meta name="twitter:description" content="{{ $description }}">
     <meta name="twitter:image" content="{{ $ogImage }}">
 
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
 </head>
 
 <body>
