@@ -24,7 +24,7 @@
 
         {{-- Brand / Logo --}}
         <a class="navbar-brand" href="{{ route('home') }}">
-            <img src="{{ asset('img/dario-moccia.png') }}" alt="Logo"
+            <img src="{{ asset('dario-moccia.png') }}" alt="Logo"
                  style="width: 8rem; mix-blend-mode: multiply;">
         </a>
 
