@@ -1,5 +1,20 @@
-@props(['title' => 'Tomodachi tracker'])
+@props([
+    'title' => config('app.name'),
+    'description' => 'Gestisci e traccia la tua collezione di carte Tomodachi Press.',
+    'ogImage' => null,
+    'ogUrl' => null,
+    'canonical' => null,
+    'noindex' => false,
+])
 
+@php
+    $appName = config('app.name');
+    $appUrl = rtrim(config('app.url'), '/');
+    $pageTitle = $title !== $appName ? $title . ' – ' . $appName : $appName;
+    $ogImage = $ogImage ?? $appUrl . '/img/logo.png';
+    $ogUrl = $ogUrl ?? $appUrl . request()->getPathInfo();
+    $canonical = $canonical ?? $appUrl . request()->getPathInfo();
+@endphp
 <!DOCTYPE html>
 <html lang="it">
 
@@ -8,21 +23,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="Gestisci e traccia la tua collezione di carte Tomodachi press.">
-    <meta name="keywords"
-        content="tomodachi tracker, collezione carte, card tracker, tracker tomodachi press, tracker, lista carte tomodachi press">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Tomodachi Tracker">
-    <meta property="og:description" content="Traccia la tua collezione di carte Tomodachi">
-    <meta property="og:image" content="https://www.tomodachi-tracker.it/img/logo.png">
-    <meta property="og:url" content="https://www.tomodachi-tracker.it">
-    <meta property="og:type" content="website">
-    <link rel="canonical" href="https://www.tomodachi-tracker.it">
 
-    <meta name="description" content="Gestisci e traccia la tua collezione di carte Tomodachi press.">
+    <title>{{ $pageTitle }}</title>
+    <meta name="description" content="{{ $description }}">
+    @if ($noindex)
+        <meta name="robots" content="noindex, nofollow">
+    @else
+        <meta name="robots" content="index, follow">
+    @endif
+    <link rel="canonical" href="{{ $canonical }}">
+
+    {{-- Open Graph --}}
+    <meta property="og:title" content="{{ $pageTitle }}">
+    <meta property="og:description" content="{{ $description }}">
+    <meta property="og:image" content="{{ $ogImage }}">
+    <meta property="og:url" content="{{ $ogUrl }}">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="it_IT">
+    <meta property="og:site_name" content="{{ $appName }}">
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $pageTitle }}">
+    <meta name="twitter:description" content="{{ $description }}">
+    <meta name="twitter:image" content="{{ $ogImage }}">
 
     <link rel="icon" type="image/png" href="/favicon.png">
-    <title>{{ $title }}</title>
 </head>
 
 <body>

@@ -31,22 +31,34 @@ class AuthController extends Controller
 
         $validated = $validator->validated();
 
-        if (Auth::attempt(['username' => $validated['username'], 'password' => $validated['password']])) {
-            $request->session()->regenerate();
-            return redirect()->route('home')->with('success', 'Login effettuato con successo!');
+        $loggedIn = Auth::attempt(['username' => $validated['username'], 'password' => $validated['password']]);
+
+        if (!$loggedIn && filter_var($validated['username'], FILTER_VALIDATE_EMAIL)) {
+            $loggedIn = Auth::attempt(['email' => $validated['username'], 'password' => $validated['password']]);
         }
 
-        if (filter_var($validated['username'], FILTER_VALIDATE_EMAIL)) {
-            if (Auth::attempt(['email' => $validated['username'], 'password' => $validated['password']])) {
-                $request->session()->regenerate();
-                return redirect()->route('home')->with('success', 'Login effettuato con successo!');
-            }
+        if (!$loggedIn) {
+            return back()
+                ->withErrors(['username' => 'Le credenziali inserite non sono corrette.'])
+                ->withInput($request->only('username'))
+                ->with('open_modal', 'login');
         }
 
-        return back()
-            ->withErrors(['username' => 'Le credenziali inserite non sono corrette.'])
-            ->withInput($request->only('username'))
-            ->with('open_modal', 'login');
+        /** @var \App\Models\Utente $user */
+        $user = Auth::user();
+
+        if (!$user->isAdmin() && !$user->hasVerifiedEmail()) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return back()
+                ->withErrors(['username' => 'Devi verificare la tua email prima di accedere. Controlla la casella di posta.'])
+                ->withInput($request->only('username'))
+                ->with('open_modal', 'login');
+        }
+
+        $request->session()->regenerate();
+        return redirect()->route('home')->with('success', 'Login effettuato con successo!');
     }
 
     public function showRegister()
@@ -78,9 +90,10 @@ class AuthController extends Controller
             'preferences' => json_encode([]),
         ]);
 
-        Auth::login($user);
+        $user->sendEmailVerificationNotification();
 
-        return redirect()->route('home')->with('success', 'Registrazione effettuata con successo!');
+        return redirect()->route('auth.login')
+            ->with('success', 'Registrazione completata! Controlla la tua email per verificare l\'account prima di accedere.');
     }
 
     public function logout(Request $request)
