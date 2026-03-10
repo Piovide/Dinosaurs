@@ -29,6 +29,8 @@ class AdminCartaController extends Controller
 
     public function update(Request $request, $id, CartaImageService $imageService)
     {
+        $page = $request->input('page');
+
         $request->validate([
             'titolo'                   => 'required|string|max:255',
             'descrizione'              => 'nullable|string',
@@ -71,7 +73,10 @@ class AdminCartaController extends Controller
         // Sync alternative versions pivot
         $carta->versioni()->sync($request->input('versione_ids', []));
 
-        return redirect()->route('admin.collezioni.show', $carta->col_id_collezione)
+        return redirect()->route('admin.collezioni.show', [
+                'id' => $carta->col_id_collezione,
+                'page' => $page,
+            ])
             ->with('success', 'Carta aggiornata con successo.');
     }
 
