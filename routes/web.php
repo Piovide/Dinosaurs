@@ -41,7 +41,22 @@ Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Http\Request $requ
         abort(403, 'Link di verifica non valido.');
     }
 
-    if (!$request->hasValidSignature()) {
+    if (!$request->query('signature') && $request->query('amp;signature')) {
+        $request->query->set('signature', $request->query('amp;signature'));
+        $request->query->remove('amp;signature');
+    }
+
+    $queryDaIgnorare = array_values(array_filter(
+        array_keys($request->query()),
+        fn($query) => !in_array($query, ['expires', 'signature'], true)
+    ));
+    $queryDaIgnorare[] = 'amp;signature';
+    $queryDaIgnorare = array_values(array_unique($queryDaIgnorare));
+
+    $signatureValida = \Illuminate\Support\Facades\URL::hasValidSignature($request, true, $queryDaIgnorare)
+        || \Illuminate\Support\Facades\URL::hasValidSignature($request, false, $queryDaIgnorare);
+
+    if (!$signatureValida) {
         abort(403, 'Il link di verifica è scaduto o non valido.');
     }
 

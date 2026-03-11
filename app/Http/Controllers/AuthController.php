@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\URL;
 
 class AuthController extends Controller
 {
@@ -91,16 +90,7 @@ class AuthController extends Controller
             'preferences' => json_encode([]),
         ]);
 
-        $url = URL::temporarySignedRoute(
-            'verification.verify',
-            now()->addMinutes(60),
-            [
-                'id' => $user->id_utente,
-                'hash' => sha1($user->getEmailForVerification())
-            ]
-        );
-
-        $user->sendEmailVerificationNotification($url);
+        $user->sendEmailVerificationNotification();
 
         return redirect()->route('auth.login')
             ->with('success', 'Registrazione completata! Controlla la tua email per verificare l\'account prima di accedere.');

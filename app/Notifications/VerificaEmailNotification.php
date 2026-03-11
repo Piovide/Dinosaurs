@@ -4,9 +4,25 @@ namespace App\Notifications;
 
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\URL;
 
 class VerificaEmailNotification extends VerifyEmail
 {
+    protected function verificationUrl($notifiable): string
+    {
+        $relativeSignedUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(config('auth.verification.expire', 60)),
+            [
+                'id' => $notifiable->getKey(),
+                'hash' => sha1($notifiable->getEmailForVerification()),
+            ],
+            false
+        );
+
+        return url($relativeSignedUrl);
+    }
+
     protected function buildMailMessage($url): MailMessage
     {
         return (new MailMessage)
