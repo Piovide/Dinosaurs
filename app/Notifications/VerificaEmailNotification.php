@@ -7,6 +7,17 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 class VerificaEmailNotification extends VerifyEmail
 {
+    public function __construct(private ?string $customUrl = null) {}
+
+    protected function verificationUrl($notifiable): string
+    {
+        if ($this->customUrl !== null) {
+            return $this->customUrl;
+        }
+
+        return parent::verificationUrl($notifiable);
+    }
+
     protected function buildMailMessage($url): MailMessage
     {
         return (new MailMessage)

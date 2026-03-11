@@ -60,9 +60,9 @@ class Utente extends Authenticatable implements MustVerifyEmail {
         return $this->hasMany(CollezioneUtente::class, 'utn_id_utente', 'id_utente');
     }
 
-    public function sendEmailVerificationNotification(): void
+    public function sendEmailVerificationNotification(?string $url = null): void
     {
-        $this->notify(new VerificaEmailNotification());
+        $this->notify(new VerificaEmailNotification($url));
     }
 
     public function sendPasswordResetNotification($token): void
