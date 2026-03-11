@@ -95,7 +95,7 @@ class AuthController extends Controller
             'verification.verify',
             now()->addMinutes(60),
             [
-                'id' => $user->id,
+                'id' => $user->id_utente,
                 'hash' => sha1($user->getEmailForVerification())
             ]
         );
