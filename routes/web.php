@@ -52,7 +52,7 @@ Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Http\Request $requ
     \Illuminate\Support\Facades\Auth::login($user);
 
     return redirect()->route('home')->with('success', 'Email verificata con successo! Benvenuto su ' . config('app.name') . '!');
-})->middleware('signed')->name('verification.verify');
+})->name('verification.verify');
 Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('success', 'Link di verifica inviato di nuovo. Controlla la tua email.');
