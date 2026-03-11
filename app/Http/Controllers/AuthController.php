@@ -90,7 +90,16 @@ class AuthController extends Controller
             'preferences' => json_encode([]),
         ]);
 
-        $user->sendEmailVerificationNotification();
+        $url = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            [
+                'id' => $user->id,
+                'hash' => sha1($user->getEmailForVerification())
+            ]
+        );
+
+        $user->sendEmailVerificationNotification($url);
 
         return redirect()->route('auth.login')
             ->with('success', 'Registrazione completata! Controlla la tua email per verificare l\'account prima di accedere.');
