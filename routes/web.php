@@ -1,9 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\CartaController;
 use App\Http\Controllers\CollezioneUtenteController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\ArtistaController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminCollezioneController;
@@ -14,6 +17,7 @@ use App\Http\Controllers\Admin\AdminCollezioneTipologiaController;
 use App\Http\Controllers\Admin\AdminVersioneCollezioneController;
 
 Route::get('/', [CartaController::class, 'index'])->name('home');
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/carte/{id}', [CartaController::class, 'show'])->name('carte.show');
 
 Route::get('/artisti', [ArtistaController::class, 'index'])->name('artisti.index');
@@ -27,6 +31,53 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('auth.register');
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+// Email verification routes
+Route::get('/email/verify', fn() => view('auth.verify-email'))->middleware('auth')->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Http\Request $request, $id, $hash) {
+    $user = \App\Models\Utente::findOrFail($id);
+
+    if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+        abort(403, 'Link di verifica non valido.');
+    }
+
+    if (!$request->query('signature') && $request->query('amp;signature')) {
+        $request->query->set('signature', $request->query('amp;signature'));
+        $request->query->remove('amp;signature');
+    }
+
+    $queryDaIgnorare = array_values(array_filter(
+        array_keys($request->query()),
+        fn($query) => !in_array($query, ['expires', 'signature'], true)
+    ));
+    $queryDaIgnorare[] = 'amp;signature';
+    $queryDaIgnorare = array_values(array_unique($queryDaIgnorare));
+
+    $signatureValida = \Illuminate\Support\Facades\URL::hasValidSignature($request, true, $queryDaIgnorare)
+        || \Illuminate\Support\Facades\URL::hasValidSignature($request, false, $queryDaIgnorare);
+
+    if (!$signatureValida) {
+        abort(403, 'Il link di verifica è scaduto o non valido.');
+    }
+
+    if (!$user->hasVerifiedEmail()) {
+        $user->markEmailAsVerified();
+    }
+
+    \Illuminate\Support\Facades\Auth::login($user);
+
+    return redirect()->route('home')->with('success', 'Email verificata con successo! Benvenuto su ' . config('app.name') . '!');
+})->name('verification.verify');
+Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('success', 'Link di verifica inviato di nuovo. Controlla la tua email.');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+// Password reset routes
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->middleware('guest')->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->middleware('guest')->name('password.email');
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->middleware('guest')->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->middleware('guest')->name('password.update');
 Route::get('/collezione/{username?}', [CollezioneUtenteController::class, 'collezione'])->name('collezione');
 
 // API Routes per la collezione dell'utente

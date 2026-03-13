@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Artista;
 use App\Models\Carta;
 use App\Models\Collezione;
 use App\Models\CollezioneRarita;
@@ -16,6 +17,16 @@ class CartaController extends Controller
 
         if ($request->filled('collezione')) {
             $query->where('col_id_collezione', $request->collezione);
+        }
+
+        if ($request->filled('artista')) {
+            $query->where('art_id_artista', $request->artista);
+        }
+
+        if ($request->filled('cerca')) {
+            $term = '%' . $request->cerca . '%';
+            $query->where(fn($q) => $q->where('titolo', 'ilike', $term)
+                ->orWhereRaw("CAST(numero AS TEXT) ILIKE ?", [$term]));
         }
 
         if ($request->filled('rarita')) {
@@ -33,14 +44,18 @@ class CartaController extends Controller
             ? Collezione::find($request->collezione)
             : null;
 
-        // Rarità e tipologie: se una collezione è selezionata, solo le sue;
-        // altrimenti tutte le rarità/tipologie presenti nel sistema.
+        $collezioni = Collezione::orderBy('nome')->get();
+
+        // Rarità, tipologie e artisti: se una collezione è selezionata, solo i suoi;
+        // altrimenti tutti quelli presenti nel sistema.
         if ($collezioneSelezionata) {
             $rarita    = CollezioneRarita::where('col_id_collezione', $collezioneSelezionata->id_collezione)->orderBy('nome')->get();
             $tipologie = CollezioneTipologia::where('col_id_collezione', $collezioneSelezionata->id_collezione)->orderBy('nome')->get();
+            $artisti   = Artista::whereHas('carte', fn($q) => $q->where('col_id_collezione', $collezioneSelezionata->id_collezione))->orderBy('nominativo')->get();
         } else {
             $rarita    = CollezioneRarita::orderBy('nome')->get();
             $tipologie = CollezioneTipologia::orderBy('nome')->get();
+            $artisti   = Artista::orderBy('nominativo')->get();
         }
 
         $collezione = $collezioneSelezionata;
@@ -53,7 +68,7 @@ class CartaController extends Controller
             ]);
         }
 
-        return view('carte.index', compact('carte', 'pagination', 'rarita', 'tipologie', 'collezione'));
+        return view('carte.index', compact('carte', 'pagination', 'rarita', 'tipologie', 'collezione', 'collezioni', 'artisti'));
     }
 
     public function show($id)

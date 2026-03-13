@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\VerificaEmailNotification;
+use App\Notifications\ReimpostaPasswordNotification;
 
-class Utente extends Authenticatable {
+class Utente extends Authenticatable implements MustVerifyEmail {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -56,6 +58,16 @@ class Utente extends Authenticatable {
      */
     public function collezione_utente(){
         return $this->hasMany(CollezioneUtente::class, 'utn_id_utente', 'id_utente');
+    }
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new VerificaEmailNotification());
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new ReimpostaPasswordNotification($token));
     }
 
     public function isAdmin(): bool
