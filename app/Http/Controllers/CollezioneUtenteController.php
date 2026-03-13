@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Artista;
 use App\Models\Carta;
 use App\Models\CollezioneRarita;
 use App\Models\CollezioneTipologia;
@@ -107,6 +108,9 @@ class CollezioneUtenteController extends Controller
 
         $rarita    = CollezioneRarita::orderBy('nome')->get();
         $tipologie = CollezioneTipologia::orderBy('nome')->get();
+        $artisti   = Artista::whereHas('carte', fn($q) => $q->whereIn('id_carta', $cartaIds))
+            ->orderBy('nominativo')
+            ->get();
         $collezione = null;
 
         if ($request->expectsJson()) {
@@ -117,6 +121,6 @@ class CollezioneUtenteController extends Controller
             ]);
         }
 
-        return view('carte.index', compact('carte', 'pagination', 'rarita', 'tipologie', 'username', 'collezione'));
+        return view('carte.index', compact('carte', 'pagination', 'rarita', 'tipologie', 'artisti', 'username', 'collezione'));
     }
 }
