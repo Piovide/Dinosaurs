@@ -39,8 +39,8 @@
                     Artista Logo
                 </h5>
                 <div class="d-flex align-items-center gap-3">
-                    <div class="rounded-circle bg-warning d-flex align-items-center justify-content-center flex-shrink-0"
-                        style="width:56px;height:56px;font-size:1.3rem;color:#fff;">TF</div>
+                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                        style="width:56px;height:56px;font-size:1.3rem;color:#fff; background-color: #ff942e;">TM</div>
                     <div>
                         <p class="mb-0 fw-semibold fs-5">Tommo</p>
                         <p class="mb-0 text-muted small">Autore del logo</p>
@@ -51,7 +51,7 @@
             <hr>
 
             {{-- Tecnologie --}}
-            <section>
+            {{-- <section>
                 <h5 class="text-muted text-uppercase fw-semibold mb-3" style="letter-spacing:.08em;font-size:.8rem;">
                     Realizzato con
                 </h5>
@@ -61,7 +61,7 @@
                     <span class="badge bg-dark fs-6 px-3 py-2">Vite</span>
                     <span class="badge bg-secondary fs-6 px-3 py-2">PostgreSQL</span>
                 </div>
-            </section>
+            </section> --}}
 
         </div>
     </div>

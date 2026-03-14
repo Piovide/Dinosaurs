@@ -171,12 +171,12 @@
 
     <x-auth-modal />
 
-    <footer class="mt-5 py-3 border-top text-center text-muted small bg-light">
+    <footer class="site-footer">
         <p class="mb-0">
             Le immagini e i diritti delle carte sono di esclusiva proprietà di
             <strong>Tomodachi Press</strong>. Questo sito è un progetto fan-made non ufficiale.
         </p>
-        <p class="mb-0 mt-1">&copy; {{ date('Y') }} {{ config('app.name') }}</p>
+        <p class="footer-copy mb-0">&copy; {{ date('Y') }} {{ config('app.name') }}</p>
     </footer>
 
 </body>

@@ -5,9 +5,37 @@
     --accent-color: #086D56;
     --background-color: #0e6b52;
 }
+html {
+    height: 100%;
+}
 body {
     background-color: var(--background-color) !important;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+#app-content {
+    flex: 1 0 auto;
+}
+footer.site-footer {
+    flex-shrink: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.35);
+    color: rgba(255, 255, 255, 0.85);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    font-size: .82rem;
+    letter-spacing: .015em;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+footer.site-footer strong {
+    color: #fff;
+    font-weight: 600;
+}
+footer.site-footer .footer-copy {
+    margin-top: .5rem;
+    font-size: .75rem;
+    color: rgba(255, 255, 255, 0.45);
 }
 
 .card {
