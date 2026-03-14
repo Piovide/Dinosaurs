@@ -27,9 +27,9 @@ Route::view('/crediti', 'crediti')->name('crediti');
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('auth.login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('auth.register');
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
 // Email verification routes
@@ -110,6 +110,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Aggiunta carta a una collezione
     Route::get('/collezioni/{collezioneId}/carte/create',  [AdminCollezioneController::class, 'createCarta'])->name('collezioni.carta.create');
     Route::post('/collezioni/{collezioneId}/carte',        [AdminCollezioneController::class, 'storeCarta'])->name('collezioni.carta.store');
+    Route::post('/collezioni/{collezioneId}/import-carte-json', [AdminCollezioneController::class, 'importCarteJson'])->name('collezioni.import.json');
+    Route::post('/collezioni/{collezioneId}/import-immagini-carte', [AdminCollezioneController::class, 'importImmaginiCarte'])->name('collezioni.import.immagini');
+
+    // Regole versioni in base alla rarita
+    Route::post('/collezioni/{collezioneId}/regole-versioni-rarita', [AdminCollezioneController::class, 'storeRegolaVersioniPerRarita'])->name('collezioni.regole-versioni.store');
+    Route::delete('/collezioni/{collezioneId}/regole-versioni-rarita/{raritaId}', [AdminCollezioneController::class, 'destroyRegolaVersioniPerRarita'])->name('collezioni.regole-versioni.destroy');
 
     // Rarità per collezione
     Route::post('/collezioni/{collezioneId}/rarita',            [AdminCollezioneRaritaController::class, 'store'])->name('collezioni.rarita.store');

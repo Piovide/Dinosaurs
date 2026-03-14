@@ -77,7 +77,12 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    @include('admin.carte._artista_field', ['selectedArtistaId' => $carta->art_id_artista])
+                    @include('admin.carte._artista_field', [
+                        'selectedArtistaId' => $carta->art_id_artista,
+                        'selectedArtistaSecondarioId' => $carta->art_id_artista_secondario,
+                        'selectedArtistaBackId' => $carta->art_id_artista_back,
+                        'collapseExtraArtists' => true,
+                    ])
                 </div>
 
                 <div class="row g-3 mb-3">
@@ -108,6 +113,13 @@
                                 style="max-height:160px;border-radius:8px;border:1px solid #ddd;">
                         </div>
                         <p class="text-muted small">Carica una nuova immagine per sostituire quella attuale.</p>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="1" id="remove_immagine"
+                                name="remove_immagine" {{ old('remove_immagine') ? 'checked' : '' }}>
+                            <label class="form-check-label" for="remove_immagine">
+                                Rimuovi immagine corrente
+                            </label>
+                        </div>
                     @else
                         <div class="mt-1">
                             <img id="imgPreview" src="#" alt="Anteprima"

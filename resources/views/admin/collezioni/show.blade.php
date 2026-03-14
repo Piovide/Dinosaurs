@@ -349,6 +349,148 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary bg-opacity-15"><strong>Regole Versioni per Rarita</strong></div>
+                <div class="card-body p-0">
+                    <table class="table table-sm mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Rarita</th>
+                                <th>Versioni automatiche</th>
+                                <th style="width:60px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($rarita as $r)
+                                @php($regoleRarita = $regoleVersioni->get($r->id_collezione_rarita, collect()))
+                                <tr>
+                                    <td class="fw-semibold">{{ $r->nome }}</td>
+                                    <td>
+                                        @if ($regoleRarita->isEmpty())
+                                            <span class="text-muted">Nessuna</span>
+                                        @else
+                                            {{ $regoleRarita->pluck('versione_nome')->join(', ') }}
+                                        @endif
+                                    </td>
+                                    <td class="text-end">
+                                        <form method="POST"
+                                            action="{{ route('admin.collezioni.regole-versioni.destroy', [$collezione->id_collezione, $r->id_collezione_rarita]) }}"
+                                            class="d-inline"
+                                            onsubmit="return confirm('Eliminare le regole automatiche per la rarita {{ addslashes($r->nome) }}?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-outline-danger py-0"
+                                                title="Rimuovi regola">✕</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="text-muted small text-center py-2">Definisci prima
+                                        almeno una
+                                        rarita.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <form method="POST"
+                        action="{{ route('admin.collezioni.regole-versioni.store', $collezione->id_collezione) }}">
+                        @csrf
+                        <div class="row g-2 align-items-end">
+                            <div class="col-sm-4">
+                                <label class="form-label small mb-1">Rarita <span class="text-danger">*</span></label>
+                                <select name="rarita_id" class="form-select form-select-sm" required>
+                                    <option value="">Seleziona</option>
+                                    @foreach ($rarita as $r)
+                                        <option value="{{ $r->id_collezione_rarita }}">{{ $r->nome }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label small mb-1">Versioni automatiche</label>
+                                <select name="versione_ids[]" class="form-select form-select-sm" multiple
+                                    style="min-height: 92px;">
+                                    @foreach ($versioni as $v)
+                                        <option value="{{ $v->id_versione }}">{{ $v->nome }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="form-text">Se non selezioni versioni, la regola viene svuotata.</div>
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="submit" class="btn btn-sm btn-primary w-100">Salva</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-primary bg-opacity-10">
+                        <strong>Import massivo carte da JSON</strong>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST"
+                            action="{{ route('admin.collezioni.import.json', $collezione->id_collezione) }}"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <label class="form-label fw-semibold">File JSON</label>
+                            <input type="file" name="json_file" accept=".json,application/json,text/plain"
+                                class="form-control form-control-sm" required>
+                            <div class="form-text mt-2">
+                                Struttura richiesta: root con chiave <code>cards</code> e lista oggetti.
+                            </div>
+                            <pre class="bg-light border rounded p-2 mt-2 small mb-3" style="white-space:pre-wrap;">{
+  "cards": [
+    {
+      "numero": 1,
+      "titolo": "Nome carta",
+      "descrizione": "Testo opzionale",
+      "artista": "Nome artista",
+      "prefisso": "M",
+      "suffisso": "a",
+      "rarita": "Rara",
+      "tipologie": ["Creatura", "Acqua"],
+      "versioni": ["Promo"]
+    }
+  ]
+}</pre>
+                            <button type="submit" class="btn btn-sm btn-primary">Importa JSON</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-success bg-opacity-10">
+                        <strong>Assegnazione massiva immagini</strong>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST"
+                            action="{{ route('admin.collezioni.import.immagini', $collezione->id_collezione) }}"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <label class="form-label fw-semibold">Immagini carte</label>
+                            <input type="file" name="immagini[]" accept="image/*"
+                                class="form-control form-control-sm" multiple required>
+                            <div class="form-text mt-2 mb-3">
+                                Ogni file deve chiamarsi con il numero della carta, ad esempio: <code>1.png</code>,
+                                <code>25.jpg</code>, <code>100.webp</code>.
+                            </div>
+                            <button type="submit" class="btn btn-sm btn-success">Importa immagini</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>

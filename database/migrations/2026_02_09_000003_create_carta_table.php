@@ -18,6 +18,14 @@ return new class extends Migration
                   ->nullable()
                   ->constrained('artista', 'id_artista')
                   ->nullOnDelete();
+            $table->foreignId('art_id_artista_secondario')
+                ->nullable()
+                ->constrained('artista', 'id_artista')
+                ->nullOnDelete();
+            $table->foreignId('art_id_artista_back')
+                ->nullable()
+                ->constrained('artista', 'id_artista')
+                ->nullOnDelete();
             $table->integer('numero')->nullable();
             $table->string('prefisso', 20)->nullable();
             $table->string('suffisso', 20)->nullable();

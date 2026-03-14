@@ -42,7 +42,7 @@
                     <div class="rounded-circle bg-warning d-flex align-items-center justify-content-center flex-shrink-0"
                         style="width:56px;height:56px;font-size:1.3rem;color:#fff;">TF</div>
                     <div>
-                        <p class="mb-0 fw-semibold fs-5">Tommaso Franceschet</p>
+                        <p class="mb-0 fw-semibold fs-5">Tommo</p>
                         <p class="mb-0 text-muted small">Autore del logo</p>
                     </div>
                 </div>

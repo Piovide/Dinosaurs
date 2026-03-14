@@ -19,6 +19,8 @@ class Carta extends Model
         'titolo',
         'descrizione',
         'art_id_artista',
+        'art_id_artista_secondario',
+        'art_id_artista_back',
         'numero',
         'prefisso',
         'suffisso',
@@ -51,6 +53,16 @@ class Carta extends Model
     public function artista()
     {
         return $this->belongsTo(Artista::class, 'art_id_artista', 'id_artista');
+    }
+
+    public function artistaSecondario()
+    {
+        return $this->belongsTo(Artista::class, 'art_id_artista_secondario', 'id_artista');
+    }
+
+    public function artistaBack()
+    {
+        return $this->belongsTo(Artista::class, 'art_id_artista_back', 'id_artista');
     }
 
     /**

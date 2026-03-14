@@ -21,6 +21,18 @@ body {
     }
 }
 
+.card-artista-link {
+    color: white;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.card-artista-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
 /* Effetto 3D sul modal */
 .card[data-carta-id] {
     width: 100%;
@@ -246,4 +258,49 @@ body {
 /* Hover over unselected */
 .rarita-selector label.btn-outline-warning:hover {
     opacity: 1;
+}
+
+.version-control-btn {
+    font-size: .7rem;
+}
+
+.versione-select-wrap {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--bs-secondary);
+    border-radius: var(--bs-border-radius-sm, .375rem);
+    padding: .25rem .5rem;
+    background: transparent;
+    color: var(--bs-secondary);
+    font-size: .7rem;
+    cursor: pointer;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+}
+
+.versione-select-wrap .versione-select {
+    border: none;
+    box-shadow: none;
+    background: transparent !important;
+    color: inherit;
+    font-size: .7rem;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
+    max-width: 130px;
+}
+
+.versione-select-wrap .versione-select:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+/* Active state: matches checked .btn-outline-secondary (filled secondary) */
+.versione-select-wrap-active {
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary);
+    color: #fff;
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }

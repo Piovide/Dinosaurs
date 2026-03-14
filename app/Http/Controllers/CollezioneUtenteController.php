@@ -11,6 +11,7 @@ use App\Models\Utente;
 use App\Models\VersioneCollezione;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CollezioneUtenteController extends Controller
 {
@@ -24,6 +25,13 @@ class CollezioneUtenteController extends Controller
             'quantita'                 => 'required|integer|min:0',
             'rar_id_collezione_rarita' => 'nullable|exists:collezione_rarita,id_collezione_rarita',
             'ver_id_versione'          => 'nullable|exists:versione_collezione,id_versione',
+        ]);
+        Log::info('Aggiornamento collezione utente', [
+            'utente_id' => Auth::id(),
+            'car_id_carta' => $request->car_id_carta,
+            'quantita' => $request->quantita,
+            'rar_id_collezione_rarita' => $request->rar_id_collezione_rarita,
+            'ver_id_versione' => $request->ver_id_versione,
         ]);
 
         $utenteId  = Auth::id();
@@ -85,6 +93,10 @@ class CollezioneUtenteController extends Controller
     public function collezione(Request $request, $username = null)
     {
         if ($username === null) {
+            if (!Auth::check()) {
+                return redirect()->route('auth.login')
+                    ->with('error', 'Devi accedere per vedere la tua collezione.');
+            }
             $username = Auth::user()->username;
         }
 

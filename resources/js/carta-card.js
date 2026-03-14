@@ -34,10 +34,12 @@ export function initCartaCard() {
             const cartaId = this.name.replace('rarita_sel_', '');
             const card = this.closest('[data-carta-id="' + cartaId + '"]');
             const input = card.querySelector('input[name="numero_in_collezione"]');
+            if (!input) return;
             const versioneId = input.dataset.versioneId ?? '';
 
             input.dataset.raritaId = this.value;
             input.value = getComboQty(card, this.value, versioneId);
+            console.log('[CartaCard] rarita cambiata →', { cartaId, raritaId: this.value, versioneId, qty: input.value });
         });
     });
 
@@ -48,10 +50,66 @@ export function initCartaCard() {
             const cartaId = this.name.replace('versione_sel_', '');
             const card = this.closest('[data-carta-id="' + cartaId + '"]');
             const input = card.querySelector('input[name="numero_in_collezione"]');
-            const raritaId = input.dataset.raritaId ?? '';
+            const raritaId = input?.dataset?.raritaId ?? '';
+
+            // Reset nested version selects when a radio version is chosen (visual — runs always).
+            card.querySelectorAll('.versione-select').forEach(select => {
+                select.selectedIndex = 0;
+                select.classList.remove('versione-select-active');
+                const wrap = select.closest('.versione-select-wrap');
+                if (wrap) wrap.classList.remove('versione-select-wrap-active');
+            });
+
+            if (!input) return;
 
             input.dataset.versioneId = this.value;
             input.value = getComboQty(card, raritaId, this.value);
+            console.log('[CartaCard] versione radio cambiata →', { cartaId, raritaId, versioneId: this.value, qty: input.value });
+        });
+    });
+
+    // Wire up nested version selects.
+    document.querySelectorAll('.versione-select:not([data-cc-init])').forEach(select => {
+        select.dataset.ccInit = '1';
+        select.addEventListener('change', function () {
+            const cartaId = this.dataset.cartaId;
+            const card = this.closest('[data-combos]');
+            const input = card.querySelector('input[name="numero_in_collezione"]');
+            const raritaId = input?.dataset?.raritaId ?? '';
+
+            // Selecting a nested option deselects all non-nested versions (visual — runs always).
+            card.querySelectorAll('.versione-radio').forEach(radio => {
+                radio.checked = false;
+            });
+
+            const selected = this.options[this.selectedIndex];
+            const versioneId = selected?.dataset?.versioneId ?? '';
+
+            console.log('[CartaCard] versione select cambiata →', {
+                cartaId,
+                raritaId,
+                selectValue: this.value,
+                dataVersioneId: selected?.dataset?.versioneId,
+                versioneIdEffettivo: versioneId,
+            });
+
+            // Highlight only the active select (visual — runs always).
+            card.querySelectorAll('.versione-select').forEach(other => {
+                other.classList.remove('versione-select-active');
+                const otherWrap = other.closest('.versione-select-wrap');
+                if (otherWrap) otherWrap.classList.remove('versione-select-wrap-active');
+            });
+
+            if (versioneId) {
+                this.classList.add('versione-select-active');
+                const wrap = this.closest('.versione-select-wrap');
+                if (wrap) wrap.classList.add('versione-select-wrap-active');
+            }
+
+            if (!input) return;
+
+            input.dataset.versioneId = versioneId;
+            input.value = getComboQty(card, raritaId, versioneId);
         });
     });
 
@@ -83,6 +141,8 @@ export function initCartaCard() {
         const quantita = parseInt(input.value) || 0;
         const key = `${cartaId}__${raritaId ?? 'null'}__${versioneId ?? 'null'}`;
 
+        console.log('[CartaCard] salvataggio in coda →', { cartaId, raritaId, versioneId, quantita, key });
+
         if (pendingRequests.has(key)) {
             clearTimeout(pendingRequests.get(key));
         }
@@ -103,6 +163,8 @@ export function initCartaCard() {
         if (raritaId) body.rar_id_collezione_rarita = raritaId;
         if (versioneId) body.ver_id_versione = versioneId;
 
+        console.log('[CartaCard] → POST /api/collezione-utente/aggiorna', body);
+
         fetch('/api/collezione-utente/aggiorna', {
             method: 'POST',
             headers: {
@@ -121,6 +183,7 @@ export function initCartaCard() {
                 return response.json();
             })
             .then(data => {
+                console.log('[CartaCard] ← risposta API', data);
                 if (data.success) {
                     // Update the stored combo qty so switching selection shows correct value
                     const card = document.querySelector('[data-carta-id="' + input.dataset.idCarta + '"]');

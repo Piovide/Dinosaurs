@@ -95,7 +95,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link"
+                        <a class="nav-link cursor-pointer"
                             @auth href="{{ route('collezione') }}"
                        @else onclick="openLoginModal(); return false;" @endauth>
                             Collezione
@@ -170,6 +170,14 @@
     </div>
 
     <x-auth-modal />
+
+    <footer class="mt-5 py-3 border-top text-center text-muted small bg-light">
+        <p class="mb-0">
+            Le immagini e i diritti delle carte sono di esclusiva proprietà di
+            <strong>Tomodachi Press</strong>. Questo sito è un progetto fan-made non ufficiale.
+        </p>
+        <p class="mb-0 mt-1">&copy; {{ date('Y') }} {{ config('app.name') }}</p>
+    </footer>
 
 </body>
 
