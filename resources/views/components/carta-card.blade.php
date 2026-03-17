@@ -59,6 +59,23 @@
         ];
     }
 
+    usort($regularVersions, function ($a, $b) {
+        return strnatcasecmp((string) ($a['label'] ?? ''), (string) ($b['label'] ?? ''));
+    });
+
+    foreach ($nestedVersionGroups as &$options) {
+        usort($options, function ($a, $b) {
+            return strnatcasecmp((string) ($a['label'] ?? ''), (string) ($b['label'] ?? ''));
+        });
+    }
+    unset($options);
+
+    if (!empty($nestedVersionGroups)) {
+        uksort($nestedVersionGroups, function ($a, $b) {
+            return strnatcasecmp((string) $a, (string) $b);
+        });
+    }
+
     $hasVersioni = !empty($regularVersions) || !empty($nestedVersionGroups);
 
     // Initial state: first rarity (or null) + no version
