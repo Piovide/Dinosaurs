@@ -56,7 +56,7 @@
         <div class="container-fluid px-3 px-lg-5">
 
             {{-- Brand / Logo --}}
-            <a class="navbar-brand" href="{{ route('home') }}">
+            <a class="navbar-brand suca" href="{{ route('home') }}">
                 <img src="{{ asset('logo.png') }}" alt="Logo" style="width: 8rem; mix-blend-mode: multiply;">
             </a>
 

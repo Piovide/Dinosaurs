@@ -43,6 +43,7 @@ footer.site-footer .footer-copy {
     width: 100%;
     background-color: rgba(255, 255, 255, 0.4) !important;
     backdrop-filter: blur(10px);
+    border: 1px solid #fff6 !important;
     & .img-container {
         aspect-ratio: 63.5 / 88;
         background-color: white;
@@ -64,6 +65,16 @@ footer.site-footer .footer-copy {
 /* Effetto 3D sul modal */
 .card[data-carta-id] {
     width: 100%;
+    z-index: 1;
+}
+
+.card[data-carta-id].dropdown-open {
+    z-index: 50;
+}
+
+/* CSS-only fallback for modern browsers when a Bootstrap dropdown is open */
+.card[data-carta-id]:has(.versione-dropdown .dropdown-menu.show) {
+    z-index: 50;
 }
 
 /* Carta image - clickable on both desktop and mobile */
@@ -309,6 +320,7 @@ footer.site-footer .footer-copy {
     min-width: 0;
     max-height: 220px;
     overflow-y: auto;
+    z-index: 1200;
 }
 
 /* Version selector — select (mobile): sempre evidenziato perché c'è sempre una selezione */
@@ -341,4 +353,9 @@ footer.site-footer .footer-copy {
         flex: 0 0 auto;
         width: 12.5%; /* 100% / 8 */
     }
+}
+
+.suca {
+    cursor: url("../../public/cursor.cur"), auto;
+
 }

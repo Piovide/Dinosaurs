@@ -1,5 +1,6 @@
 export function initCartaCard() {
     initCartaImageZoom();
+    initCartaDropdownStacking();
 
     const pendingRequests = new Map();
     const DELAY_MS = 1000;
@@ -210,6 +211,23 @@ export function initCartaCard() {
                 }
             });
     }
+}
+
+function initCartaDropdownStacking() {
+    document.querySelectorAll('.versione-dropdown').forEach(dropdown => {
+        if (dropdown.dataset.stackInit === '1') return;
+        dropdown.dataset.stackInit = '1';
+
+        dropdown.addEventListener('show.bs.dropdown', () => {
+            const card = dropdown.closest('.card[data-carta-id]');
+            if (card) card.classList.add('dropdown-open');
+        });
+
+        dropdown.addEventListener('hide.bs.dropdown', () => {
+            const card = dropdown.closest('.card[data-carta-id]');
+            if (card) card.classList.remove('dropdown-open');
+        });
+    });
 }
 
 function initCartaImageZoom() {

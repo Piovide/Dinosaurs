@@ -50,6 +50,23 @@
 
             <hr>
 
+            {{-- Fornitori carte --}}
+            <section class="mb-4">
+                <h5 class="text-muted text-uppercase fw-semibold mb-3" style="letter-spacing:.08em;font-size:.8rem;">
+                    Fornitori carte
+                </h5>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                        style="width:56px;height:56px;font-size:1.3rem;color:#fff; background-color: #1f78d1;">AP</div>
+                    <div>
+                        <p class="mb-0 fw-semibold fs-5">Alessandro Pinarello</p>
+                        <p class="mb-0 text-muted small">Fornitore carte {9, 14, 29, 43, 53, 63, 102, 121, 126, 158}</p>
+                    </div>
+                </div>
+            </section>
+
+            <hr>
+
             {{-- Tecnologie --}}
             {{-- <section>
                 <h5 class="text-muted text-uppercase fw-semibold mb-3" style="letter-spacing:.08em;font-size:.8rem;">

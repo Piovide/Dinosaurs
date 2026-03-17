@@ -67,7 +67,7 @@
     $initialQty = $combos[$initialKey] ?? 0;
 @endphp
 <div class="col-6 col-sm-4 col-md-3 col-xl-2 col-xxl-carte">
-    <div class="card h-100 shadow-sm p-3 rounded" data-carta-id="{{ $carta->id_carta }}" data-combos="{{ $combosJson }}">
+    <div class="card h-100 p-3 rounded" data-carta-id="{{ $carta->id_carta }}" data-combos="{{ $combosJson }}">
         <div class="img-container position-relative">
             <img src="{{ $carta->immagine_asset }}" class="card-img-top carta-image" alt="{{ $carta->titolo }}"
                 data-carta-id="{{ $carta->id_carta }}" style="cursor: pointer;">
