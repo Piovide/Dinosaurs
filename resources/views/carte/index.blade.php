@@ -70,7 +70,7 @@
     </form>
     <div class="w-100 mx-auto px-2 px-md-4 px-lg-5">
 
-        <div class="row" id="cards-grid">
+        <div class="row g-2 g-sm-3" id="cards-grid">
             @if ($carte->isEmpty())
                 <p class="text-center" id="no-cards-msg">Nessuna carta trovata.</p>
             @endif

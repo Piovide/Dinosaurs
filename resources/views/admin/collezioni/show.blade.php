@@ -311,7 +311,15 @@
                         <tbody>
                             @forelse($versioni as $v)
                                 <tr>
-                                    <td>{{ $v->nome }}</td>
+                                    <td>
+                                        @php preg_match('/^__\[([^\]]+)\]-(.+)$/u', $v->nome, $vm); @endphp
+                                        @if ($vm)
+                                            <span class="text-muted small">{{ trim($vm[1]) }} /</span>
+                                            {{ trim($vm[2]) }}
+                                        @else
+                                            {{ $v->nome }}
+                                        @endif
+                                    </td>
                                     <td class="text-end">
                                         <form method="POST"
                                             action="{{ route('admin.collezioni.versioni.destroy', [$collezione->id_collezione, $v->id_versione]) }}"
@@ -333,19 +341,90 @@
                 </div>
                 <div class="card-footer bg-transparent">
                     <form method="POST"
-                        action="{{ route('admin.collezioni.versioni.store', $collezione->id_collezione) }}">
+                        action="{{ route('admin.collezioni.versioni.store', $collezione->id_collezione) }}"
+                        onsubmit="return assemblaVersNome(this)">
                         @csrf
-                        <div class="row g-2 align-items-end">
+                        <input type="hidden" name="nome" id="vers_nome_hidden">
+
+                        {{-- Mode toggle --}}
+                        <div class="mb-2">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="radio" class="btn-check" name="vers_tipo" id="vers_tipo_semplice"
+                                    value="semplice" checked autocomplete="off" onchange="toggleVersMode()">
+                                <label class="btn btn-outline-secondary" for="vers_tipo_semplice">Semplice</label>
+                                <input type="radio" class="btn-check" name="vers_tipo" id="vers_tipo_annidata"
+                                    value="annidata" autocomplete="off" onchange="toggleVersMode()">
+                                <label class="btn btn-outline-secondary" for="vers_tipo_annidata">Annidata
+                                    (gruppo)</label>
+                            </div>
+                        </div>
+
+                        {{-- Semplice --}}
+                        <div id="vers-fields-semplice" class="row g-2 align-items-center">
                             <div class="col">
-                                <label class="form-label small mb-1">Nome <span class="text-danger">*</span></label>
-                                <input type="text" name="nome" class="form-control form-control-sm"
-                                    placeholder="es. Olografica, 1ª Edizione, Promo" required>
+                                <input type="text" id="vers_nome_semplice" class="form-control form-control-sm"
+                                    placeholder="es. Olografica, 1ª Edizione, Promo">
                             </div>
                             <div class="col-auto">
                                 <button type="submit" class="btn btn-sm btn-secondary">+ Aggiungi</button>
                             </div>
                         </div>
+
+                        {{-- Annidata --}}
+                        <div id="vers-fields-annidata" style="display:none;">
+                            <div class="row g-2 align-items-center">
+                                <div class="col">
+                                    <input type="text" id="vers_gruppo" class="form-control form-control-sm"
+                                        placeholder="Nome gruppo (es. Foil)" oninput="aggiornaVersPreview()">
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="vers_opzione" class="form-control form-control-sm"
+                                        placeholder="Opzione (es. Standard)" oninput="aggiornaVersPreview()">
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-sm btn-secondary">+ Aggiungi</button>
+                                </div>
+                            </div>
+                            <div class="mt-1 text-muted small">
+                                Salvato come: <code id="vers-preview">__[Gruppo]-Opzione</code>
+                            </div>
+                        </div>
                     </form>
+                    <script>
+                        function toggleVersMode() {
+                            const isAnnidata = document.getElementById('vers_tipo_annidata').checked;
+                            document.getElementById('vers-fields-semplice').style.display = isAnnidata ? 'none' : '';
+                            document.getElementById('vers-fields-annidata').style.display = isAnnidata ? '' : 'none';
+                        }
+
+                        function aggiornaVersPreview() {
+                            const g = document.getElementById('vers_gruppo').value.trim() || 'Gruppo';
+                            const o = document.getElementById('vers_opzione').value.trim() || 'Opzione';
+                            document.getElementById('vers-preview').textContent = `__[${g}]-${o}`;
+                        }
+
+                        function assemblaVersNome() {
+                            const isAnnidata = document.getElementById('vers_tipo_annidata').checked;
+                            let nome;
+                            if (isAnnidata) {
+                                const g = document.getElementById('vers_gruppo').value.trim();
+                                const o = document.getElementById('vers_opzione').value.trim();
+                                if (!g || !o) {
+                                    alert('Inserisci nome gruppo e opzione.');
+                                    return false;
+                                }
+                                nome = `__[${g}]-${o}`;
+                            } else {
+                                nome = document.getElementById('vers_nome_semplice').value.trim();
+                                if (!nome) {
+                                    alert('Il nome è obbligatorio.');
+                                    return false;
+                                }
+                            }
+                            document.getElementById('vers_nome_hidden').value = nome;
+                            return true;
+                        }
+                    </script>
                 </div>
             </div>
         </div>

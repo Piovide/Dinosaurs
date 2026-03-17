@@ -57,7 +57,7 @@ footer.site-footer .footer-copy {
 }
 
 .card-artista-link:hover {
-    color: var(--primary-color);
+    color: var(--accent-color);
     text-decoration: underline;
 }
 
@@ -288,47 +288,57 @@ footer.site-footer .footer-copy {
     opacity: 1;
 }
 
+
+/* Version selector — radio button labels */
 .version-control-btn {
     font-size: .7rem;
 }
 
-.versione-select-wrap {
-    display: inline-flex;
-    align-items: center;
-    border: 1px solid var(--bs-secondary);
-    border-radius: var(--bs-border-radius-sm, .375rem);
-    padding: .25rem .5rem;
-    background: transparent;
-    color: var(--bs-secondary);
+/* Version selector — dropdown button (nested groups, desktop) */
+.versione-dropdown-btn {
     font-size: .7rem;
-    cursor: pointer;
-    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
 }
-
-.versione-select-wrap .versione-select {
-    border: none;
-    box-shadow: none;
-    background: transparent !important;
-    color: inherit;
-    font-size: .7rem;
-    padding: 0;
-    cursor: pointer;
-    outline: none;
-    max-width: 130px;
-}
-
-.versione-select-wrap .versione-select:focus {
-    box-shadow: none;
-    outline: none;
-}
-
-/* Active state: matches checked .btn-outline-secondary (filled secondary) */
-.versione-select-wrap-active {
+/* Active state: mirrors btn-check:checked + btn-outline-secondary */
+.versione-dropdown-btn.versione-dropdown-active {
     background-color: var(--bs-secondary);
     border-color: var(--bs-secondary);
     color: #fff;
 }
+.versione-dropdown-menu {
+    font-size: .75rem;
+    min-width: 0;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+/* Version selector — select (mobile): sempre evidenziato perché c'è sempre una selezione */
+.versione-select-mobile {
+    font-size: .75rem;
+    padding: .2rem .4rem;
+    border: 1px solid var(--bs-secondary);
+    border-radius: var(--bs-border-radius-sm, .375rem);
+    background-color: var(--bs-secondary);
+    color: #fff;
+    cursor: pointer;
+}
+.versione-select-mobile option,
+.versione-select-mobile optgroup {
+    background-color: #fff;
+    color: var(--bs-body-color);
+}
+.versione-select-mobile:focus {
+    outline: none;
+    box-shadow: none;
+}
 
 .cursor-pointer {
     cursor: pointer;
+}
+
+/* Cards grid — 8 colonne su schermi molto larghi (≥ 1400px) */
+@media (min-width: 1400px) {
+    .col-xxl-carte {
+        flex: 0 0 auto;
+        width: 12.5%; /* 100% / 8 */
+    }
 }

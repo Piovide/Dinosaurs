@@ -66,7 +66,7 @@
     $initialKey = $firstRaritaId . '__';
     $initialQty = $combos[$initialKey] ?? 0;
 @endphp
-<div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3 mb-md-4">
+<div class="col-6 col-sm-4 col-md-3 col-xl-2 col-xxl-carte">
     <div class="card h-100 shadow-sm p-3 rounded" data-carta-id="{{ $carta->id_carta }}" data-combos="{{ $combosJson }}">
         <div class="img-container position-relative">
             <img src="{{ $carta->immagine_asset }}" class="card-img-top carta-image" alt="{{ $carta->titolo }}"
@@ -103,9 +103,34 @@
                 </div>
             @endif
 
-            {{-- Versione selectors (radio + nested dropdown markdown) --}}
+            {{-- Versione selectors --}}
             @if ($hasVersioni)
-                <div class="d-flex justify-content-center gap-1 flex-wrap mb-1 versione-selector">
+                {{-- Mobile: unica <select> con tutte le versioni --}}
+                <div class="d-md-none mb-1 px-1">
+                    <select class="versione-select-mobile w-100" data-carta-id="{{ $carta->id_carta }}">
+                        <option value="" selected>Base</option>
+                        @foreach ($regularVersions as $v)
+                            <option value="{{ $v['id'] }}" data-versione-id="{{ $v['id'] }}">
+                                {{ $v['label'] }}@if ($v['qty'] > 0)
+                                    ({{ $v['qty'] }})
+                                @endif
+                            </option>
+                        @endforeach
+                        @foreach ($nestedVersionGroups as $groupName => $options)
+                            <optgroup label="{{ $groupName }}">
+                                @foreach ($options as $option)
+                                    <option value="{{ $option['id'] }}" data-versione-id="{{ $option['id'] }}">
+                                        {{ $option['label'] }}@if ($option['qty'] > 0)
+                                            ({{ $option['qty'] }})
+                                        @endif
+                                    </option>
+                                @endforeach
+                            </optgroup>
+                        @endforeach
+                    </select>
+                </div>
+                {{-- Desktop: radio button per versioni + dropdown solo per gruppi nested --}}
+                <div class="d-none d-md-flex justify-content-center gap-1 flex-wrap mb-1">
                     <input type="radio" class="btn-check versione-radio" name="versione_sel_{{ $carta->id_carta }}"
                         id="versione_{{ $carta->id_carta }}_base" value="" autocomplete="off" checked>
                     <label class="btn btn-sm btn-outline-secondary py-1 px-2 version-control-btn"
@@ -122,20 +147,26 @@
                             @endif
                         </label>
                     @endforeach
-
                     @foreach ($nestedVersionGroups as $groupName => $options)
-                        <div class="versione-select-wrap" data-versione-group="{{ $groupName }}">
-                            <select class="versione-select" data-carta-id="{{ $carta->id_carta }}"
-                                title="{{ $groupName }}">
-                                <option value="" selected disabled>{{ $groupName }}</option>
+                        <div class="dropdown versione-dropdown">
+                            <button type="button"
+                                class="btn btn-sm btn-outline-secondary dropdown-toggle versione-dropdown-btn"
+                                data-bs-toggle="dropdown" aria-expanded="false" data-versione-id=""
+                                data-group-name="{{ $groupName }}">
+                                {{ $groupName }}
+                            </button>
+                            <ul class="dropdown-menu versione-dropdown-menu">
                                 @foreach ($options as $option)
-                                    <option value="{{ $option['id'] }}" data-versione-id="{{ $option['id'] }}">
-                                        {{ $option['label'] }}@if ($option['qty'] > 0)
-                                            ({{ $option['qty'] }})
-                                        @endif
-                                    </option>
+                                    <li>
+                                        <a class="dropdown-item versione-dropdown-item" href="#"
+                                            data-versione-id="{{ $option['id'] }}">
+                                            {{ $option['label'] }}@if ($option['qty'] > 0)
+                                                ({{ $option['qty'] }})
+                                            @endif
+                                        </a>
+                                    </li>
                                 @endforeach
-                            </select>
+                            </ul>
                         </div>
                     @endforeach
                 </div>

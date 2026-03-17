@@ -43,71 +43,73 @@ export function initCartaCard() {
         });
     });
 
-    // Wire up version radio buttons — look up combo from data-combos
+    // Wire up mobile version select (small screens: d-md-none)
+    document.querySelectorAll('.versione-select-mobile:not([data-cc-init])').forEach(select => {
+        select.dataset.ccInit = '1';
+        select.addEventListener('change', function () {
+            const card = this.closest('[data-combos]');
+            const input = card?.querySelector('input[name="numero_in_collezione"]');
+            const raritaId = input?.dataset?.raritaId ?? '';
+            const versioneId = this.value;
+
+            if (!input) return;
+            input.dataset.versioneId = versioneId;
+            input.value = getComboQty(card, raritaId, versioneId);
+        });
+    });
+
+    // Wire up desktop version radio buttons (regular versions)
     document.querySelectorAll('.versione-radio:not([data-cc-init])').forEach(radio => {
         radio.dataset.ccInit = '1';
         radio.addEventListener('change', function () {
             const cartaId = this.name.replace('versione_sel_', '');
             const card = this.closest('[data-carta-id="' + cartaId + '"]');
-            const input = card.querySelector('input[name="numero_in_collezione"]');
+            const input = card?.querySelector('input[name="numero_in_collezione"]');
             const raritaId = input?.dataset?.raritaId ?? '';
 
-            // Reset nested version selects when a radio version is chosen (visual — runs always).
-            card.querySelectorAll('.versione-select').forEach(select => {
-                select.selectedIndex = 0;
-                select.classList.remove('versione-select-active');
-                const wrap = select.closest('.versione-select-wrap');
-                if (wrap) wrap.classList.remove('versione-select-wrap-active');
+            // Reset all dropdown buttons to their group name (visual — always runs)
+            card?.querySelectorAll('.versione-dropdown').forEach(dropdown => {
+                const btn = dropdown.querySelector('.versione-dropdown-btn');
+                if (btn) {
+                    btn.textContent = btn.dataset.groupName;
+                    btn.dataset.versioneId = '';
+                    btn.classList.remove('versione-dropdown-active');
+                }
+                dropdown.querySelectorAll('.versione-dropdown-item').forEach(i => i.classList.remove('active'));
             });
 
             if (!input) return;
-
             input.dataset.versioneId = this.value;
             input.value = getComboQty(card, raritaId, this.value);
-            console.log('[CartaCard] versione radio cambiata →', { cartaId, raritaId, versioneId: this.value, qty: input.value });
         });
     });
 
-    // Wire up nested version selects.
-    document.querySelectorAll('.versione-select:not([data-cc-init])').forEach(select => {
-        select.dataset.ccInit = '1';
-        select.addEventListener('change', function () {
-            const cartaId = this.dataset.cartaId;
+    // Wire up desktop version dropdown items (nested groups only)
+    document.querySelectorAll('.versione-dropdown-item:not([data-cc-init])').forEach(item => {
+        item.dataset.ccInit = '1';
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
             const card = this.closest('[data-combos]');
-            const input = card.querySelector('input[name="numero_in_collezione"]');
+            const dropdown = this.closest('.versione-dropdown');
+            const btn = dropdown?.querySelector('.versione-dropdown-btn');
+            const input = card?.querySelector('input[name="numero_in_collezione"]');
             const raritaId = input?.dataset?.raritaId ?? '';
+            const versioneId = this.dataset.versioneId ?? '';
 
-            // Selecting a nested option deselects all non-nested versions (visual — runs always).
-            card.querySelectorAll('.versione-radio').forEach(radio => {
-                radio.checked = false;
-            });
+            // Uncheck all radio buttons (visual — always runs)
+            card?.querySelectorAll('.versione-radio').forEach(r => { r.checked = false; });
 
-            const selected = this.options[this.selectedIndex];
-            const versioneId = selected?.dataset?.versioneId ?? '';
-
-            console.log('[CartaCard] versione select cambiata →', {
-                cartaId,
-                raritaId,
-                selectValue: this.value,
-                dataVersioneId: selected?.dataset?.versioneId,
-                versioneIdEffettivo: versioneId,
-            });
-
-            // Highlight only the active select (visual — runs always).
-            card.querySelectorAll('.versione-select').forEach(other => {
-                other.classList.remove('versione-select-active');
-                const otherWrap = other.closest('.versione-select-wrap');
-                if (otherWrap) otherWrap.classList.remove('versione-select-wrap-active');
-            });
-
-            if (versioneId) {
-                this.classList.add('versione-select-active');
-                const wrap = this.closest('.versione-select-wrap');
-                if (wrap) wrap.classList.add('versione-select-wrap-active');
+            // Update button label (CSS ::after caret is unaffected by textContent)
+            if (btn) {
+                btn.textContent = this.textContent.trim();
+                btn.dataset.versioneId = versioneId;
+                btn.classList.add('versione-dropdown-active');
             }
+            // Mark active item
+            dropdown?.querySelectorAll('.versione-dropdown-item').forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
 
             if (!input) return;
-
             input.dataset.versioneId = versioneId;
             input.value = getComboQty(card, raritaId, versioneId);
         });
