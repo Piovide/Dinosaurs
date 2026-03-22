@@ -86,8 +86,15 @@
 <div class="col-6 col-sm-4 col-md-3 col-xl-2 col-xxl-carte">
     <div class="card h-100 p-3 rounded" data-carta-id="{{ $carta->id_carta }}" data-combos="{{ $combosJson }}">
         <div class="img-container position-relative">
-            <img src="{{ $carta->immagine_asset }}" class="card-img-top carta-image" alt="{{ $carta->titolo }}"
-                data-carta-id="{{ $carta->id_carta }}" style="cursor: pointer;">
+            @if ($carta->immagine_asset === null)
+                <div
+                    class="placeholder-image d-flex align-items-center justify-content-center bg-secondary text-white h-100">
+                    Immagine non ancora disponibile
+                </div>
+            @else
+                <img src="{{ $carta->immagine_asset }}" class="card-img-top carta-image" alt="{{ $carta->titolo }}"
+                    data-carta-id="{{ $carta->id_carta }}" style="cursor: pointer;">
+            @endif
             <div
                 class="card-info position-absolute bottom-0 start-0 p-2 bg-dark bg-opacity-50 text-white rounded-end rounded-bottom-0">
                 <small class="d-flex align-items-center gap-1 flex-wrap">
