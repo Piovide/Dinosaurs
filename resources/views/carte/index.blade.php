@@ -7,6 +7,22 @@
             : 'Sfoglia e traccia tutte le carte Tomodachi Press. Tieni il conto della tua collezione.';
 @endphp
 <x-app-layout :title="$seoTitle" :description="$seoDesc">
+    @php
+        $resetRoute = isset($username) && $username ? route('collezione', ['username' => $username]) : route('home');
+    @endphp
+
+    @if (session('warning'))
+        <div class="alert alert-warning mx-auto" style="max-width:900px;" role="alert">
+            {{ session('warning') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger mx-auto" style="max-width:900px;" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
+
     @if ($username)
         <h1 class="text-center mb-4">Collezione di {{ $username }}</h1>
     @endif
@@ -62,7 +78,7 @@
             </div>
             <div class="col-12 d-flex justify-content-end gap-2">
                 @if (request()->hasAny(['artista', 'rarita', 'tipologia', 'cerca']))
-                    <a href="{{ route('home') }}" class="btn btn-outline-secondary">Reset</a>
+                    <a href="{{ $resetRoute }}" class="btn btn-outline-secondary">Reset</a>
                 @endif
                 <button class="btn btn-success">Filtra</button>
             </div>

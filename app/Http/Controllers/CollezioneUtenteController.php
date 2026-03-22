@@ -12,6 +12,7 @@ use App\Models\VersioneCollezione;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class CollezioneUtenteController extends Controller
 {
@@ -103,16 +104,94 @@ class CollezioneUtenteController extends Controller
         $utente   = Utente::where('username', $username)->firstOrFail();
         $cartaIds = CollezioneUtente::where('utn_id_utente', $utente->id_utente)->pluck('car_id_carta');
 
+        $invalidFilters = [];
+
+        $artistaId = $this->parseFilterId($request->query('artista'));
+        if ($request->filled('artista') && $artistaId === null) {
+            $invalidFilters[] = 'artista';
+        }
+
+        $raritaId = $this->parseFilterId($request->query('rarita'));
+        if ($request->filled('rarita') && $raritaId === null) {
+            $invalidFilters[] = 'rarita';
+        }
+
+        $tipologiaId = $this->parseFilterId($request->query('tipologia'));
+        if ($request->filled('tipologia') && $tipologiaId === null) {
+            $invalidFilters[] = 'tipologia';
+        }
+
+        $searchTerm = trim((string) $request->query('cerca', ''));
+        if (mb_strlen($searchTerm) > 100) {
+            $searchTerm = mb_substr($searchTerm, 0, 100);
+            $invalidFilters[] = 'cerca';
+        }
+
+        if ($artistaId && !Artista::where('id_artista', $artistaId)
+            ->whereHas('carte', fn($q) => $q->whereIn('id_carta', $cartaIds))
+            ->exists()) {
+            $artistaId = null;
+            $invalidFilters[] = 'artista';
+        }
+
+        if ($raritaId && !CollezioneRarita::where('id_collezione_rarita', $raritaId)
+            ->whereHas('carte', fn($q) => $q->whereIn('id_carta', $cartaIds))
+            ->exists()) {
+            $raritaId = null;
+            $invalidFilters[] = 'rarita';
+        }
+
+        if ($tipologiaId && !CollezioneTipologia::where('id_collezione_tipologia', $tipologiaId)
+            ->whereHas('carte', fn($q) => $q->whereIn('id_carta', $cartaIds))
+            ->exists()) {
+            $tipologiaId = null;
+            $invalidFilters[] = 'tipologia';
+        }
+
+        $invalidFilters = array_values(array_unique($invalidFilters));
+        if (!empty($invalidFilters) && !$request->expectsJson()) {
+            $params = ['username' => $username];
+            if ($artistaId) {
+                $params['artista'] = $artistaId;
+            }
+            if ($raritaId) {
+                $params['rarita'] = $raritaId;
+            }
+            if ($tipologiaId) {
+                $params['tipologia'] = $tipologiaId;
+            }
+            if ($searchTerm !== '') {
+                $params['cerca'] = $searchTerm;
+            }
+
+            return redirect()->route('collezione', $params)
+                ->with('warning', 'Alcuni filtri non validi sono stati rimossi automaticamente.');
+        }
+
         $query = Carta::with(['collezione', 'artista', 'raritas', 'versioni', 'tipologie'])
             ->whereIn('id_carta', $cartaIds)
             ->orderBy('id_carta');
 
-        if ($request->filled('rarita')) {
-            $query->whereHas('raritas', fn ($q) => $q->where('collezione_rarita.id_collezione_rarita', $request->rarita));
+        if ($artistaId) {
+            $query->where('art_id_artista', $artistaId);
         }
 
-        if ($request->filled('tipologia')) {
-            $query->whereHas('tipologie', fn($q) => $q->where('id_collezione_tipologia', $request->tipologia));
+        if ($searchTerm !== '') {
+            $term = '%' . mb_strtolower($searchTerm, 'UTF-8') . '%';
+            $numeroCast = DB::connection()->getDriverName() === 'pgsql'
+                ? 'CAST(numero AS TEXT)'
+                : 'CAST(numero AS CHAR)';
+
+            $query->where(fn($q) => $q->whereRaw('LOWER(titolo) LIKE ?', [$term])
+                ->orWhereRaw("{$numeroCast} LIKE ?", [$term]));
+        }
+
+        if ($raritaId) {
+            $query->whereHas('raritas', fn($q) => $q->where('collezione_rarita.id_collezione_rarita', $raritaId));
+        }
+
+        if ($tipologiaId) {
+            $query->whereHas('tipologie', fn($q) => $q->where('collezione_tipologia.id_collezione_tipologia', $tipologiaId));
         }
 
         $pagination = $query->paginate(12);
@@ -134,5 +213,24 @@ class CollezioneUtenteController extends Controller
         }
 
         return view('carte.index', compact('carte', 'pagination', 'rarita', 'tipologie', 'artisti', 'username', 'collezione'));
+    }
+
+    private function parseFilterId(mixed $value): ?int
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        if (!is_scalar($value)) {
+            return null;
+        }
+
+        $stringValue = trim((string) $value);
+        if ($stringValue === '' || !ctype_digit($stringValue)) {
+            return null;
+        }
+
+        $intValue = (int) $stringValue;
+        return $intValue > 0 ? $intValue : null;
     }
 }
