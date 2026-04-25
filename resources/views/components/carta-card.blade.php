@@ -1,13 +1,14 @@
-@props(['carta'])
+@props(['carta', 'combos' => null])
 @php
     $raritas = $carta->raritas;
     $firstRarita = $raritas->first();
     $versioniRaw = $carta->versioni ?? collect();
     $tipologie = $carta->tipologie ?? collect();
 
-    // Load user quantities indexed by "raritaId__versioneId"
-    $combos = [];
-    if (auth()->check()) {
+    // Load quantities indexed by "raritaId__versioneId".
+    // Prefer preloaded combos from controller; fallback keeps compatibility in other views.
+    $combos = is_array($combos) ? $combos : [];
+    if (empty($combos) && auth()->check()) {
         Auth::user()
             ->collezione_utente()
             ->where('car_id_carta', $carta->id_carta)
@@ -87,10 +88,8 @@
     <div class="card h-100 p-3 rounded" data-carta-id="{{ $carta->id_carta }}" data-combos="{{ $combosJson }}">
         <div class="img-container position-relative">
             @if ($carta->immagine_asset === null)
-                <div
-                    class="placeholder-image d-flex align-items-center justify-content-center bg-secondary text-white h-100">
-                    Immagine non ancora disponibile
-                </div>
+                <img src="{{ asset('placeholder.jpeg') }}" class="card-img-top carta-image" alt="{{ $carta->titolo }}"
+                    data-carta-id="{{ $carta->id_carta }}" style="cursor: pointer;">
             @else
                 <img src="{{ $carta->immagine_asset }}" class="card-img-top carta-image" alt="{{ $carta->titolo }}"
                     data-carta-id="{{ $carta->id_carta }}" style="cursor: pointer;">

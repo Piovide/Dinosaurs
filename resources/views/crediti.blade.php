@@ -33,11 +33,19 @@
 
             <hr>
 
-            {{-- Artista logo --}}
+            {{-- Artisti --}}
             <section class="mb-4">
                 <h5 class="text-muted text-uppercase fw-semibold mb-3" style="letter-spacing:.08em;font-size:.8rem;">
-                    Artista Logo
+                    Artisti
                 </h5>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                        style="width:56px;height:56px;font-size:1.3rem;color:#fff; background-color: #0da11e;">TM</div>
+                    <div>
+                        <p class="mb-0 fw-semibold fs-5">Martina Maiorano</p>
+                        <p class="mb-0 text-muted small">Carta placeholder</p>
+                    </div>
+                </div>
                 <div class="d-flex align-items-center gap-3">
                     <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
                         style="width:56px;height:56px;font-size:1.3rem;color:#fff; background-color: #ff942e;">TM</div>

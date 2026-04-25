@@ -359,3 +359,77 @@ footer.site-footer .footer-copy {
     cursor: url("../../public/cursor.cur"), auto;
 
 }
+
+/* Error pages */
+.error-page-body {
+    position: relative;
+    overflow-x: hidden;
+}
+
+.error-page-background {
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.2), transparent 35%),
+        radial-gradient(circle at 85% 15%, rgba(32, 164, 128, 0.35), transparent 38%),
+        radial-gradient(circle at 50% 100%, rgba(9, 53, 44, 0.45), transparent 42%);
+    pointer-events: none;
+}
+
+.error-page-wrap {
+    min-height: calc(100vh - 130px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.error-card {
+    width: min(760px, 100%);
+    text-align: center;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 1.25rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.25);
+    color: #fff;
+    padding: 1.8rem 1.2rem;
+}
+
+.error-logo {
+    width: clamp(110px, 26vw, 180px);
+    mix-blend-mode: screen;
+}
+
+.error-code {
+    margin: .9rem 0 .25rem;
+    font-size: clamp(2.2rem, 9vw, 4rem);
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: .05em;
+}
+
+.error-title {
+    margin-bottom: .65rem;
+    font-size: clamp(1.05rem, 2.5vw, 1.55rem);
+    font-weight: 600;
+}
+
+.error-message {
+    margin: 0 auto 1.1rem;
+    max-width: 58ch;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.error-help {
+    margin-top: 1rem;
+    margin-bottom: 0;
+    font-size: .92rem;
+    color: rgba(255, 255, 255, 0.76);
+}
+
+@media (width >= 768px) {
+    .error-card {
+        padding: 2.4rem 2rem;
+    }
+}

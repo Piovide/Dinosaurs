@@ -1,6 +1,6 @@
 <x-admin-layout title="Gestione Utenti">
     <div class="d-flex align-items-center justify-content-between mb-4">
-        <h2 class="mb-0">Utenti</h2>
+        <h2 class="mb-0">Utenti (attualmente registrati: {{ $utenti->total() }})</h2>
     </div>
 
     <div class="card border-0 shadow-sm">
@@ -19,10 +19,12 @@
                     @forelse($utenti as $utente)
                         <tr>
                             <td class="text-muted small">{{ $utente->id_utente }}</td>
-                            <td class="fw-semibold">{{ $utente->username }}</td>
+                            <td class="fw-semibold"><a
+                                    href="{{ route('collezione', ['username' => $utente->username]) }}">{{ $utente->username }}</a>
+                            </td>
                             <td>{{ $utente->email }}</td>
                             <td>
-                                @if($utente->ruolo === 'admin')
+                                @if ($utente->ruolo === 'admin')
                                     <span class="badge bg-danger">Admin</span>
                                 @elseif($utente->ruolo === 'moderatore')
                                     <span class="badge bg-warning text-dark">Moderatore</span>
@@ -32,12 +34,12 @@
                             </td>
                             <td class="text-end">
                                 <a href="{{ route('admin.utenti.edit', $utente->id_utente) }}"
-                                   class="btn btn-sm btn-outline-primary">Modifica</a>
-                                @if($utente->id_utente !== Auth::id())
+                                    class="btn btn-sm btn-outline-primary">Modifica</a>
+                                @if ($utente->id_utente !== Auth::id())
                                     <form method="POST"
-                                          action="{{ route('admin.utenti.destroy', $utente->id_utente) }}"
-                                          class="d-inline"
-                                          onsubmit="return confirm('Eliminare l\'utente {{ addslashes($utente->username) }}?')">
+                                        action="{{ route('admin.utenti.destroy', $utente->id_utente) }}"
+                                        class="d-inline"
+                                        onsubmit="return confirm('Eliminare l\'utente {{ addslashes($utente->username) }}?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-outline-danger">Elimina</button>
@@ -46,7 +48,9 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="6" class="text-center text-muted py-4">Nessun utente trovato.</td></tr>
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">Nessun utente trovato.</td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
